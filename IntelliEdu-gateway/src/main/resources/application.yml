@@ -1,0 +1,34 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: IntelliEdu-gateway
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+        - id: yuoj-backend-user-service
+          uri: lb://yuoj-backend-user-service
+          predicates:
+            - Path=/api/user/**
+        - id: yuoj-backend-question-service
+          uri: lb://yuoj-backend-question-service
+          predicates:
+            - Path=/api/question/**
+        - id: yuoj-backend-judge-service
+          uri: lb://yuoj-backend-judge-service
+          predicates:
+            - Path=/api/judge/**
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+knife4j:
+  gateway:
+    enabled: true
+    strategy: discover
+    discover:
+      enabled: true
+      version: openapi3
+      excluded-services:
+        - IntelliEdu-gateway
