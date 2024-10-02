@@ -50,8 +50,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 throw new BusinessException(Err.PARAMS_ERROR, "没有填写要更新的内容");
             }
         } else {
-            if (StringUtils.isAnyBlank(username, password))
+            if (StringUtils.isAnyBlank(username, password)) {
                 throw new BusinessException(Err.PARAMS_ERROR, "用户名、密码不能为空");
+            }
         }
 
         if (StringUtils.isNotBlank(username) && username.length() < 6) {
@@ -93,6 +94,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userVo;
     }
 
+    @Override
     public Long getLoginUserId(HttpServletRequest request) {
         UserVo userVo = (UserVo) request.getSession().getAttribute(Constant.LOGIN_USER);
         return userVo.getId();
