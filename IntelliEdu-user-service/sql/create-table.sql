@@ -8,7 +8,8 @@ create table if not exists `user`
     `username`    varchar(256)                           not null comment '账号',
     `password`    varchar(256)                           not null comment '密码',
     `nickname`    varchar(256)                           null comment '昵称',
-    `role`        varchar(256) default 'user'            not null comment '角色',
+    `avatar`      varchar(1024)                          null comment '头像',
+    `role`        varchar(256) default 'user'            not null comment '角色 (user,admin)',
     `create_time` datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
     `update_time` datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     `deleted`     tinyint      default 0                 not null comment '是否删除'

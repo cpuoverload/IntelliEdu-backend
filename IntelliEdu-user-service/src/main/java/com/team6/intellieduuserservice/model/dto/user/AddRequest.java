@@ -25,6 +25,11 @@ public class AddRequest implements Serializable {
     private String nickname;
 
     /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
      * 角色
      */
     private String role;

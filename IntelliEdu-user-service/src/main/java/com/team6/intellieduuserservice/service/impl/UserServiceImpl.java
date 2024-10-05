@@ -40,13 +40,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String username = user.getUsername();
         String password = user.getPassword();
         String nickname = user.getNickname();
+        String avatar = user.getAvatar();
         String role = user.getRole();
 
         if (isUpdate) {
             if (id == null) {
                 throw new BusinessException(Err.PARAMS_ERROR, "用户 id 为空");
             }
-            if (StringUtils.isAllBlank(password, nickname, role)) {
+            if (StringUtils.isAllBlank(password, nickname, avatar, role)) {
                 throw new BusinessException(Err.PARAMS_ERROR, "没有填写要更新的内容");
             }
         } else {
@@ -155,8 +156,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public List<UserVo> listUser(ListRequest listRequest) {
-        IPage<User> page = new Page<>(listRequest.getCurrent(), listRequest.getPageSize());
+    public Page<UserVo> listUser(ListRequest listRequest) {
+        Long current = listRequest.getCurrent();
+        Long pageSize = listRequest.getPageSize();
+        IPage<User> page = new Page<>(current, pageSize);
 
         // 由于不是所有字段都是精确查询，有的字段需要模糊查询，有的字段需要排序，所以不能简单地写成 new QueryWrapper(entity)
         // sortField 是动态传入的列名，无法使用 LambdaQueryWrapper
@@ -169,8 +172,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 .orderBy(listRequest.getSortField() != null, listRequest.getIsAscend(), listRequest.getSortField());
 
         IPage<User> userPage = this.page(page, queryWrapper);
-        List<UserVo> userVoList = userPage.getRecords().stream().map(this::entityToVo).collect(Collectors.toList());
-        return userVoList;
+
+        Page<UserVo> userVoPage = new Page<>(current, pageSize, userPage.getTotal());
+        List<UserVo> voRecords = userPage.getRecords().stream().map(this::entityToVo).collect(Collectors.toList());
+        userVoPage.setRecords(voRecords);
+
+        return userVoPage;
     }
 
     @Override

@@ -1,12 +1,12 @@
 package com.team6.intellieduuserservice.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.team6.intellieduuserservice.model.dto.user.ListRequest;
 import com.team6.intellieduuserservice.model.entity.User;
 import com.team6.intellieduuserservice.model.vo.UserVo;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 public interface UserService extends IService<User> {
 
@@ -24,7 +24,7 @@ public interface UserService extends IService<User> {
 
     UserVo getUserById(Long id);
 
-    List<UserVo> listUser(ListRequest listRequest);
+    Page<UserVo> listUser(ListRequest listRequest);
 
     Long addUser(User user);
 

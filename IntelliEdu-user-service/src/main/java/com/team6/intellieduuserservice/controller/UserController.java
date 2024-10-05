@@ -1,5 +1,6 @@
 package com.team6.intellieduuserservice.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team6.intellieduuserservice.config.RequiresAdmin;
 import com.team6.intellieduuserservice.config.RequiresLogin;
 import com.team6.intellieduuserservice.model.dto.user.*;
@@ -15,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/")
 public class UserController {
 
     @Resource
@@ -58,14 +58,14 @@ public class UserController {
         return ApiResponse.success(true);
     }
 
-    @GetMapping("/getMyInfo")
+    @GetMapping("/get/me")
     @RequiresLogin
     public ApiResponse<UserVo> getMyInfo(HttpServletRequest request) {
         UserVo userVo = userService.getMyInfo(request);
         return ApiResponse.success(userVo);
     }
 
-    @PostMapping("/updateMyInfo")
+    @PostMapping("/update/me")
     @RequiresLogin
     public ApiResponse<Boolean> updateMyInfo(@RequestBody UpdateMyInfoRequest updateMyInfoRequest,
                                              HttpServletRequest request) {
@@ -94,12 +94,12 @@ public class UserController {
 
     @PostMapping("/list")
     @RequiresAdmin
-    public ApiResponse<List<UserVo>> listUser(@RequestBody ListRequest listRequest) {
+    public ApiResponse<Page<UserVo>> listUser(@RequestBody ListRequest listRequest) {
         if (listRequest == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
-        List<UserVo> userVoList = userService.listUser(listRequest);
-        return ApiResponse.success(userVoList);
+        Page<UserVo> userVoPage = userService.listUser(listRequest);
+        return ApiResponse.success(userVoPage);
     }
 
     @PostMapping("/add")
