@@ -17,4 +17,9 @@ public class UpdateMyInfoRequest implements Serializable {
      * 昵称
      */
     private String nickname;
+
+    /**
+     * 头像
+     */
+    private String avatar;
 }

@@ -378,24 +378,26 @@ class UserServiceImplTest {
 
     @Test
     void testListUser_Success() {
+        long current = 1L, size = 10L;
         ListRequest listRequest = new ListRequest();
-        listRequest.setCurrent(1L);
-        listRequest.setPageSize(10L);
+        listRequest.setCurrent(current);
+        listRequest.setPageSize(size);
 
         User user = new User();
         user.setId(1L);
         user.setUsername("username");
 
-        IPage<User> page = new Page<>();
+        IPage<User> page = new Page<>(current, size);
         page.setRecords(Collections.singletonList(user));
+        page.setTotal(1);
 
         when(userMapper.selectPage(any(), any())).thenReturn(page);
 
-        List<UserVo> userVoList = userService.listUser(listRequest);
+        Page<UserVo> userVoPage = userService.listUser(listRequest);
 
-        assertNotNull(userVoList);
-        assertEquals(1, userVoList.size());
-        assertEquals(user.getId(), userVoList.get(0).getId());
+        assertNotNull(userVoPage);
+        assertEquals(1, userVoPage.getTotal());
+        assertEquals(user.getId(), userVoPage.getRecords().get(0).getId());
     }
 
     // ------------------ Tests for logout(HttpServletRequest request) ------------------
