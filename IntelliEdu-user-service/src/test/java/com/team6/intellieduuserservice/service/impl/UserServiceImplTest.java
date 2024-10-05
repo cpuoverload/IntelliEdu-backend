@@ -38,14 +38,8 @@ class UserServiceImplTest {
     @Mock
     private HttpSession session;
 
-    @Captor
-    private ArgumentCaptor<LambdaQueryWrapper<User>> queryWrapperCaptor;
-
-    @Captor
-    private ArgumentCaptor<Long> idCaptor;
-
     @BeforeEach
-    void setUp() throws NoSuchFieldException, IllegalAccessException {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         when(request.getSession()).thenReturn(session);
 
@@ -472,9 +466,7 @@ class UserServiceImplTest {
         doThrow(new BusinessException(Err.PARAMS_ERROR)).when(userService).updateUser(invalidUser);
 
         // Act & Assert
-        BusinessException exception = assertThrows(BusinessException.class, () -> {
-            userService.updateMyInfo(invalidUser);
-        });
+        BusinessException exception = assertThrows(BusinessException.class, () -> userService.updateMyInfo(invalidUser));
 
         assertEquals(Err.PARAMS_ERROR.getCode(), exception.getCode());
         verify(userService, times(1)).updateUser(invalidUser);
