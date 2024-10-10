@@ -1,6 +1,7 @@
 package com.team6.intellieduuserservice.service.impl;
 
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -169,7 +170,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 .like(StringUtils.isNotBlank(listRequest.getUsername()), "username", listRequest.getUsername())
                 .like(StringUtils.isNotBlank(listRequest.getNickname()), "nickname", listRequest.getNickname())
                 .eq(listRequest.getRole() != null, "role", listRequest.getRole())
-                .orderBy(listRequest.getSortField() != null, listRequest.getIsAscend(), listRequest.getSortField());
+                .orderBy(listRequest.getSortField() != null, listRequest.getIsAscend(), StrUtil.toUnderlineCase(listRequest.getSortField()));
 
         IPage<User> userPage = this.page(page, queryWrapper);
 
