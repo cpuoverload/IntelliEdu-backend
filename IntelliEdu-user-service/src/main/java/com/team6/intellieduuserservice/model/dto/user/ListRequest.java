@@ -1,6 +1,6 @@
 package com.team6.intellieduuserservice.model.dto.user;
 
-import com.team6.intellieduuserservice.utils.TableRequest;
+import com.team6.intellieducommon.utils.TableRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

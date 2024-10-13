@@ -2,7 +2,7 @@ package com.team6.intellieduuserservice.config;
 
 import com.team6.intellieduuserservice.constant.Constant;
 import com.team6.intellieduuserservice.model.vo.UserVo;
-import com.team6.intellieduuserservice.utils.Err;
+import com.team6.intellieducommon.utils.Err;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
