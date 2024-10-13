@@ -1,11 +1,11 @@
 package com.team6.intellieduuserservice.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.team6.intelliedumodel.dto.user.*;
 import com.team6.intellieduuserservice.config.RequiresAdmin;
 import com.team6.intellieduuserservice.config.RequiresLogin;
-import com.team6.intellieduuserservice.model.dto.user.*;
-import com.team6.intellieduuserservice.model.entity.User;
-import com.team6.intellieduuserservice.model.vo.UserVo;
+import com.team6.intelliedumodel.entity.User;
+import com.team6.intelliedumodel.vo.UserVo;
 import com.team6.intellieduuserservice.service.UserService;
 import com.team6.intellieducommon.utils.ApiResponse;
 import com.team6.intellieducommon.utils.BusinessException;

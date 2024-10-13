@@ -1,4 +1,4 @@
-package com.team6.intellieduuserservice.model.vo;
+package com.team6.intelliedumodel.vo;
 
 import lombok.Data;
 
