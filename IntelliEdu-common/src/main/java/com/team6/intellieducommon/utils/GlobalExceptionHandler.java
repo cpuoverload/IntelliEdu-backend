@@ -1,4 +1,4 @@
-package com.team6.intellieduuserservice.utils;
+package com.team6.intellieducommon.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;

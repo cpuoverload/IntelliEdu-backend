@@ -7,10 +7,10 @@ import com.team6.intellieduuserservice.model.dto.user.*;
 import com.team6.intellieduuserservice.model.entity.User;
 import com.team6.intellieduuserservice.model.vo.UserVo;
 import com.team6.intellieduuserservice.service.UserService;
-import com.team6.intellieduuserservice.utils.ApiResponse;
-import com.team6.intellieduuserservice.utils.BusinessException;
-import com.team6.intellieduuserservice.utils.Err;
-import com.team6.intellieduuserservice.utils.IdRequest;
+import com.team6.intellieducommon.utils.ApiResponse;
+import com.team6.intellieducommon.utils.BusinessException;
+import com.team6.intellieducommon.utils.Err;
+import com.team6.intellieducommon.utils.IdRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 

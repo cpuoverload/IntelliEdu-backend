@@ -1,4 +1,4 @@
-package com.team6.intellieduuserservice.utils;
+package com.team6.intellieducommon.utils;
 
 import lombok.Getter;
 
