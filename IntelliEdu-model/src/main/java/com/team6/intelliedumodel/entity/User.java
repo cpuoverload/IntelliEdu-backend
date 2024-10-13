@@ -1,4 +1,4 @@
-package com.team6.intellieduuserservice.model.entity;
+package com.team6.intelliedumodel.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;

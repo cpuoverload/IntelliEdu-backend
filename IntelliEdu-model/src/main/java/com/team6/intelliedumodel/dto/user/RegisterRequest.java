@@ -1,4 +1,4 @@
-package com.team6.intellieduuserservice.model.dto.user;
+package com.team6.intelliedumodel.dto.user;
 
 import lombok.Data;
 

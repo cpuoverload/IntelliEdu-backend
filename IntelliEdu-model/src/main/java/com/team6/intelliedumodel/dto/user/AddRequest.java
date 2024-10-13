@@ -1,17 +1,18 @@
-package com.team6.intellieduuserservice.model.dto.user;
+package com.team6.intelliedumodel.dto.user;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class UpdateRequest implements Serializable {
-    private static final long serialVersionUID = 5200123986732432652L;
+public class AddRequest implements Serializable {
+
+    private static final long serialVersionUID = -3890744654110351049L;
 
     /**
-     * id
+     * 账号
      */
-    private Long id;
+    private String username;
 
     /**
      * 密码
