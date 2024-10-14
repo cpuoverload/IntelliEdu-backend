@@ -12,7 +12,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/intelli_edu_application
     username: root
-    password: RGDd31yLTdrpPNH
+    password: ${MYSQL_PASSWORD}
   redis:
     database: 1
     host: localhost
