@@ -9,6 +9,11 @@ public class ApiResponse<T> {
     private T data;
     private String message;
 
+    // Feign 在处理序列化与反序列化时，会使用 Jackson 来处理 JSON 数据
+    // Jackson 会尝试通过默认构造器（无参构造器）来创建 ApiResponse 的实例，若不添加，会报错
+    public ApiResponse() {
+    }
+
     public ApiResponse(int code, T data, String message) {
         this.code = code;
         this.data = data;

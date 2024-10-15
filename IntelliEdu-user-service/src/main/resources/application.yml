@@ -19,10 +19,10 @@ spring:
     port: 6379
     timeout: 5000
 #    password: 123456
-#  cloud:
-#    nacos:
-#      discovery:
-#        server-addr: 127.0.0.1:8848
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
