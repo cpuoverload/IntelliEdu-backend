@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team6.intellieduuserservice.constant.Constant;
 import com.team6.intellieduuserservice.mapper.UserMapper;
-import com.team6.intelliedumodel.dto.user.ListRequest;
+import com.team6.intelliedumodel.dto.user.ListUserRequest;
 import com.team6.intelliedumodel.entity.User;
 import com.team6.intelliedumodel.vo.UserVo;
 import com.team6.intellieducommon.utils.BusinessException;
@@ -374,14 +374,14 @@ class UserServiceImplTest {
     }
 
 
-    // ------------------ Tests for listUser(ListRequest listRequest) ------------------
+    // ------------------ Tests for listUser(ListUserRequest listUserRequest) ------------------
 
     @Test
     void testListUser_Success() {
         long current = 1L, size = 10L;
-        ListRequest listRequest = new ListRequest();
-        listRequest.setCurrent(current);
-        listRequest.setPageSize(size);
+        ListUserRequest listUserRequest = new ListUserRequest();
+        listUserRequest.setCurrent(current);
+        listUserRequest.setPageSize(size);
 
         User user = new User();
         user.setId(1L);
@@ -393,7 +393,7 @@ class UserServiceImplTest {
 
         when(userMapper.selectPage(any(), any())).thenReturn(page);
 
-        Page<UserVo> userVoPage = userService.listUser(listRequest);
+        Page<UserVo> userVoPage = userService.listUser(listUserRequest);
 
         assertNotNull(userVoPage);
         assertEquals(1, userVoPage.getTotal());

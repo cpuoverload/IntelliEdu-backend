@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.team6.intellieduuserservice.constant.Constant;
 import com.team6.intellieduuserservice.mapper.UserMapper;
-import com.team6.intelliedumodel.dto.user.ListRequest;
+import com.team6.intelliedumodel.dto.user.ListUserRequest;
 import com.team6.intelliedumodel.entity.User;
 import com.team6.intelliedumodel.vo.UserVo;
 import com.team6.intellieduuserservice.service.UserService;
@@ -157,20 +157,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public Page<UserVo> listUser(ListRequest listRequest) {
-        Long current = listRequest.getCurrent();
-        Long pageSize = listRequest.getPageSize();
+    public Page<UserVo> listUser(ListUserRequest listUserRequest) {
+        Long current = listUserRequest.getCurrent();
+        Long pageSize = listUserRequest.getPageSize();
         IPage<User> page = new Page<>(current, pageSize);
 
         // 由于不是所有字段都是精确查询，有的字段需要模糊查询，有的字段需要排序，所以不能简单地写成 new QueryWrapper(entity)
         // sortField 是动态传入的列名，无法使用 LambdaQueryWrapper
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper
-                .eq(listRequest.getId() != null, "id", listRequest.getId())
-                .like(StringUtils.isNotBlank(listRequest.getUsername()), "username", listRequest.getUsername())
-                .like(StringUtils.isNotBlank(listRequest.getNickname()), "nickname", listRequest.getNickname())
-                .eq(listRequest.getRole() != null, "role", listRequest.getRole())
-                .orderBy(listRequest.getSortField() != null, listRequest.getIsAscend(), StrUtil.toUnderlineCase(listRequest.getSortField()));
+                .eq(listUserRequest.getId() != null, "id", listUserRequest.getId())
+                .like(StringUtils.isNotBlank(listUserRequest.getUsername()), "username", listUserRequest.getUsername())
+                .like(StringUtils.isNotBlank(listUserRequest.getNickname()), "nickname", listUserRequest.getNickname())
+                .eq(listUserRequest.getRole() != null, "role", listUserRequest.getRole())
+                .orderBy(listUserRequest.getSortField() != null, listUserRequest.getIsAscend(), StrUtil.toUnderlineCase(listUserRequest.getSortField()));
 
         IPage<User> userPage = this.page(page, queryWrapper);
 

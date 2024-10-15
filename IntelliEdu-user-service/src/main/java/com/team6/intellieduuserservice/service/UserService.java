@@ -2,7 +2,7 @@ package com.team6.intellieduuserservice.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.team6.intelliedumodel.dto.user.ListRequest;
+import com.team6.intelliedumodel.dto.user.ListUserRequest;
 import com.team6.intelliedumodel.entity.User;
 import com.team6.intelliedumodel.vo.UserVo;
 
@@ -24,7 +24,7 @@ public interface UserService extends IService<User> {
 
     UserVo getUserById(Long id);
 
-    Page<UserVo> listUser(ListRequest listRequest);
+    Page<UserVo> listUser(ListUserRequest listUserRequest);
 
     Long addUser(User user);
 

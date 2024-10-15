@@ -24,8 +24,8 @@ create table if not exists application
 create table if not exists question
 (
     `id`          bigint auto_increment comment 'ID' primary key,
-    `questions`   json                               null comment 'Question List (JSON)',
     `app_id`      bigint                             not null comment 'Application ID',
+    `questions`   json                               null comment 'Question List (JSON)',
     `user_id`     bigint                             not null comment 'Creator User ID',
     `create_time` datetime default CURRENT_TIMESTAMP not null comment 'Creation Time',
     `update_time` datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment 'Update Time',

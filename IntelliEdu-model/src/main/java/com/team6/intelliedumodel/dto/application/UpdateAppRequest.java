@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class UpdateRequest implements Serializable {
+public class UpdateAppRequest implements Serializable {
     /**
      * ID
      */

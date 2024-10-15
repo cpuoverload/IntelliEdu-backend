@@ -94,37 +94,37 @@ public class UserController {
 
     @PostMapping("/list")
     @RequiresAdmin
-    public ApiResponse<Page<UserVo>> listUser(@RequestBody ListRequest listRequest) {
-        if (listRequest == null) {
+    public ApiResponse<Page<UserVo>> listUser(@RequestBody ListUserRequest listUserRequest) {
+        if (listUserRequest == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
-        Page<UserVo> userVoPage = userService.listUser(listRequest);
+        Page<UserVo> userVoPage = userService.listUser(listUserRequest);
         return ApiResponse.success(userVoPage);
     }
 
     @PostMapping("/add")
     @RequiresAdmin
-    public ApiResponse<Long> addUser(@RequestBody AddRequest addRequest) {
-        if (addRequest == null) {
+    public ApiResponse<Long> addUser(@RequestBody AddUserRequest addUserRequest) {
+        if (addUserRequest == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
-        if (addRequest.getUsername() == null || addRequest.getPassword() == null) {
+        if (addUserRequest.getUsername() == null || addUserRequest.getPassword() == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
         User user = new User();
-        BeanUtils.copyProperties(addRequest, user);
+        BeanUtils.copyProperties(addUserRequest, user);
         Long userId = userService.addUser(user);
         return ApiResponse.success(userId);
     }
 
     @PostMapping("/update")
     @RequiresAdmin
-    public ApiResponse<Boolean> updateUser(@RequestBody UpdateRequest updateRequest) {
-        if (updateRequest == null) {
+    public ApiResponse<Boolean> updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
+        if (updateUserRequest == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
         User user = new User();
-        BeanUtils.copyProperties(updateRequest, user);
+        BeanUtils.copyProperties(updateUserRequest, user);
         boolean success = userService.updateUser(user);
         if (!success) {
             throw new BusinessException(Err.UPDATE_ERROR);
