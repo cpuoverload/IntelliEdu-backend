@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ListRequest extends TableRequest implements Serializable {
+public class ListAppRequest extends TableRequest implements Serializable {
     /**
      * ID
      */

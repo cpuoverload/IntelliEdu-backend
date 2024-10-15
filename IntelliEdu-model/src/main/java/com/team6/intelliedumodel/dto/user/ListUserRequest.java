@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ListRequest extends TableRequest implements Serializable {
+public class ListUserRequest extends TableRequest implements Serializable {
 
     private static final long serialVersionUID = -3890744654110351039L;
 

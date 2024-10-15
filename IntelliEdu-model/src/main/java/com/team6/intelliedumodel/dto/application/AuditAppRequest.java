@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class AuditRequest implements Serializable {
+public class AuditAppRequest implements Serializable {
     /**
      * ID
      */
