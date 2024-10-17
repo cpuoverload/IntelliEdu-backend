@@ -10,6 +10,11 @@ public class AddMyScoringRequest implements Serializable {
     private static final long serialVersionUID = -587351637253379511L;
 
     /**
+     * Application ID
+     */
+    private Long appId;
+
+    /**
      * Result name
      */
     private String resultName;
@@ -17,25 +22,20 @@ public class AddMyScoringRequest implements Serializable {
     /**
      * Result Detail
      */
-    private String detail;
+    private String resultDetail;
 
     /**
      * Result Image URL
      */
-    private String imageUrl;
+    private String resultImageUrl;
 
     /**
-     * Result Attribute Array, Intended For Evaluation-Type Applications
+     * Score Threshold For This Result, Intended For Grade-Type Applications
      */
-    private List<String> attributes;
+    private Integer resultThreshold;
 
     /**
-     * Score Threshold For This Result, Intended For Grading-Type Applications
+     * Result Attribute Array (JSON), Intended For Evaluation-Type Applications
      */
-    private Integer threshold;
-
-    /**
-     * Application ID
-     */
-    private Long appId;
+    private List<String> resultAttributes;
 }
