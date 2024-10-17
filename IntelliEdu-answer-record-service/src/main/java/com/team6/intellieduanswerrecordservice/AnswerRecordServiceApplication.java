@@ -1,4 +1,4 @@
-package com.team6.intellieduuserservice;
+package com.team6.intellieduanswerrecordservice;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -6,12 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication()
-@MapperScan("com.team6.intellieduuserservice.mapper")
+@MapperScan("com.team6.intellieduanswerrecordservice.mapper")
 @EnableFeignClients(basePackages = "com.team6.intellieduapi.client")
-public class MainApplication {
+public class AnswerRecordServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MainApplication.class, args);
+        SpringApplication.run(AnswerRecordServiceApplication.class, args);
     }
 
 }
