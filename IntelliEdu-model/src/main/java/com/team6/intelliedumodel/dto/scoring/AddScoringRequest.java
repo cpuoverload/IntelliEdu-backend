@@ -3,6 +3,7 @@ package com.team6.intelliedumodel.dto.scoring;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class AddScoringRequest implements Serializable {
@@ -26,7 +27,7 @@ public class AddScoringRequest implements Serializable {
     /**
      * Result Attribute Array, Intended For Evaluation-Type Applications
      */
-    private Object attributes;
+    private List<String> attributes;
 
     /**
      * Score Threshold For This Result, Intended For Grading-Type Applications
