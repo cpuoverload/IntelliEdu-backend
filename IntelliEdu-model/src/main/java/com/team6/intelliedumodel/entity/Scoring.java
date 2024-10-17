@@ -1,6 +1,7 @@
 package com.team6.intelliedumodel.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.util.List;
  * Scoring
  * @TableName scoring
  */
-@TableName(value ="scoring")
+@TableName(value ="scoring", autoResultMap = true)
 @Data
 public class Scoring implements Serializable {
     /**
@@ -47,7 +48,9 @@ public class Scoring implements Serializable {
 
     /**
      * Result Attribute Array (JSON), Intended For Evaluation-Type Applications
+     * <a href="https://baomidou.com/guides/type-handler/">JSON 字符串与 Java 对象相互转换</a>
      */
+    @TableField(typeHandler = JacksonTypeHandler.class)
     private List<String> resultAttributes;
 
     /**
