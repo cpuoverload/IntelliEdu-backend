@@ -10,7 +10,8 @@
         <result property="appId" column="app_id" jdbcType="BIGINT"/>
         <result property="appType" column="app_type" jdbcType="TINYINT"/>
         <result property="strategy" column="strategy" jdbcType="TINYINT"/>
-        <result property="answers" column="answers" jdbcType="OTHER"/>
+        <result property="answers" column="answers" jdbcType="OTHER"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
         <result property="resultId" column="result_id" jdbcType="BIGINT"/>
         <result property="resultName" column="result_name" jdbcType="VARCHAR"/>
         <result property="resultDetail" column="result_detail" jdbcType="VARCHAR"/>

@@ -1,6 +1,7 @@
 package com.team6.intelliedumodel.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.team6.intelliedumodel.dto.question.QuestionContent;
 import lombok.Data;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * Question
  * @TableName question
  */
-@TableName(value ="question")
+@TableName(value ="question", autoResultMap = true)
 @Data
 public class Question implements Serializable {
     /**
@@ -23,7 +24,9 @@ public class Question implements Serializable {
 
     /**
      * Question List (JSON)
+     * <a href="https://baomidou.com/guides/type-handler/">JSON 字符串与 Java 对象相互转换</a>
      */
+    @TableField(typeHandler = JacksonTypeHandler.class)
     private List<QuestionContent> questions;
 
     /**

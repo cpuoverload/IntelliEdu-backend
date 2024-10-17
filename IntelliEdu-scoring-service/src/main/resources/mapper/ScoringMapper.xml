@@ -5,17 +5,18 @@
 <mapper namespace="com.team6.intellieduscoringservice.mapper.ScoringMapper">
 
     <resultMap id="BaseResultMap" type="com.team6.intelliedumodel.entity.Scoring">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="appId" column="app_id" jdbcType="BIGINT"/>
-            <result property="resultName" column="result_name" jdbcType="VARCHAR"/>
-            <result property="resultDetail" column="result_detail" jdbcType="VARCHAR"/>
-            <result property="resultImageUrl" column="result_image_url" jdbcType="VARCHAR"/>
-            <result property="resultThreshold" column="result_threshold" jdbcType="INTEGER"/>
-            <result property="resultAttributes" column="result_attributes" jdbcType="OTHER"/>
-            <result property="userId" column="user_id" jdbcType="BIGINT"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="appId" column="app_id" jdbcType="BIGINT"/>
+        <result property="resultName" column="result_name" jdbcType="VARCHAR"/>
+        <result property="resultDetail" column="result_detail" jdbcType="VARCHAR"/>
+        <result property="resultImageUrl" column="result_image_url" jdbcType="VARCHAR"/>
+        <result property="resultThreshold" column="result_threshold" jdbcType="INTEGER"/>
+        <result property="resultAttributes" column="result_attributes" jdbcType="OTHER"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="deleted" column="deleted" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
