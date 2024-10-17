@@ -21,20 +21,20 @@ public class UpdateMyScoringRequest implements Serializable {
     /**
      * Result Detail
      */
-    private String detail;
+    private String resultDetail;
 
     /**
      * Result Image URL
      */
-    private String imageUrl;
+    private String resultImageUrl;
 
     /**
-     * Result Attribute Array, Intended For Evaluation-Type Applications
+     * Score Threshold For This Result, Intended For Grade-Type Applications
      */
-    private Object attributes;
+    private Integer resultThreshold;
 
     /**
-     * Score Threshold For This Result, Intended For Grading-Type Applications
+     * Result Attribute Array (JSON), Intended For Evaluation-Type Applications
      */
-    private Integer threshold;
+    private Object resultAttributes;
 }

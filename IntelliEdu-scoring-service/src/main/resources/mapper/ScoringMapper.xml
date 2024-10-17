@@ -6,12 +6,12 @@
 
     <resultMap id="BaseResultMap" type="com.team6.intelliedumodel.entity.Scoring">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="resultName" column="result_name" jdbcType="VARCHAR"/>
-            <result property="detail" column="detail" jdbcType="VARCHAR"/>
-            <result property="imageUrl" column="image_url" jdbcType="VARCHAR"/>
-            <result property="attributes" column="attributes" jdbcType="OTHER"/>
-            <result property="threshold" column="threshold" jdbcType="INTEGER"/>
             <result property="appId" column="app_id" jdbcType="BIGINT"/>
+            <result property="resultName" column="result_name" jdbcType="VARCHAR"/>
+            <result property="resultDetail" column="result_detail" jdbcType="VARCHAR"/>
+            <result property="resultImageUrl" column="result_image_url" jdbcType="VARCHAR"/>
+            <result property="resultThreshold" column="result_threshold" jdbcType="INTEGER"/>
+            <result property="resultAttributes" column="result_attributes" jdbcType="OTHER"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
@@ -19,9 +19,9 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,result_name,detail,
-        image_url,attributes,threshold,
-        app_id,user_id,create_time,
+        id,app_id,result_name,
+        result_detail,result_image_url,result_threshold,
+        result_attributes,user_id,create_time,
         update_time,deleted
     </sql>
 </mapper>
