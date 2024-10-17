@@ -1,6 +1,5 @@
 package com.team6.intellieduscoringservice.controller;
 
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team6.intellieduapi.client.UserClient;
 import com.team6.intellieducommon.utils.ApiResponse;
@@ -69,10 +68,6 @@ public class ScoringController {
         long current = listMyScoringRequest.getCurrent();
         long size = listMyScoringRequest.getPageSize();
 
-        // 限制爬虫
-        if (size > 20) {
-            throw new BusinessException(Err.PARAMS_ERROR);
-        }
         // 查询数据库
         Page<Scoring> scoringPage = scoringService.page(new Page<>(current, size), scoringService.getQueryWrapper(listMyScoringRequest));
 
@@ -86,10 +81,9 @@ public class ScoringController {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
 
-        // entity -> dto
+        // dto -> entity
         Scoring scoring = new Scoring();
         BeanUtils.copyProperties(updateMyScoringRequest, scoring);
-        scoring.setResultAttributes(updateMyScoringRequest.getResultAttributes());
 
         // 数据校验
         scoringService.validScoring(scoring, false);
@@ -143,10 +137,9 @@ public class ScoringController {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
 
-        // entity -> dto
+        // dto -> entity
         Scoring scoring = new Scoring();
         BeanUtils.copyProperties(addScoringRequest, scoring);
-        scoring.setResultAttributes(addScoringRequest.getResultAttributes());
 
         // 数据校验
         scoringService.validScoring(scoring, true);
@@ -174,10 +167,6 @@ public class ScoringController {
         long current = listScoringRequest.getCurrent();
         long size = listScoringRequest.getPageSize();
 
-        // 限制爬虫
-        if (size > 20) {
-            throw new BusinessException(Err.PARAMS_ERROR);
-        }
         // 查询数据库
         Page<Scoring> scoringPage = scoringService.page(new Page<>(current, size), scoringService.getQueryWrapperAdmin(listScoringRequest));
 
@@ -191,10 +180,9 @@ public class ScoringController {
         if (updateScoringRequest == null || updateScoringRequest.getId() <= 0) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
-        //  在此处将实体类和 DTO 进行转换
+        //  dto->entity
         Scoring scoring = new Scoring();
         BeanUtils.copyProperties(updateScoringRequest, scoring);
-        scoring.setResultAttributes(updateScoringRequest.getResultAttributes());
 
         // 数据校验
         scoringService.validScoring(scoring, false);
