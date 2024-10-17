@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Scoring
@@ -47,7 +48,7 @@ public class Scoring implements Serializable {
     /**
      * Result Attribute Array (JSON), Intended For Evaluation-Type Applications
      */
-    private Object resultAttributes;
+    private List<String> resultAttributes;
 
     /**
      * Creator User ID

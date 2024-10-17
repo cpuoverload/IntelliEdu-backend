@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class ScoringVo implements Serializable {
@@ -40,7 +41,7 @@ public class ScoringVo implements Serializable {
     /**
      * Result Attribute Array (JSON), Intended For Evaluation-Type Applications
      */
-    private Object resultAttributes;
+    private List<String> resultAttributes;
 
     /**
      * Creator User ID

@@ -5,4 +5,5 @@ import com.team6.intelliedumodel.entity.Application;
 
 public interface ApplicationService extends IService<Application> {
 
+    Boolean addMyApplication(Application application);
 }

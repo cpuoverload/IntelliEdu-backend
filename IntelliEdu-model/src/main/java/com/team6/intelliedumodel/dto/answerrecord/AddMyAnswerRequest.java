@@ -3,6 +3,7 @@ package com.team6.intelliedumodel.dto.answerrecord;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class AddMyAnswerRequest implements Serializable {
@@ -16,5 +17,5 @@ public class AddMyAnswerRequest implements Serializable {
     /**
      * User Answer List (JSON)
      */
-    private Object answers;
+    private List<String> answers;
 }

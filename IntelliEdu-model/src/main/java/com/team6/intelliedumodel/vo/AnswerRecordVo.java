@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class AnswerRecordVo implements Serializable {
@@ -35,7 +36,7 @@ public class AnswerRecordVo implements Serializable {
     /**
      * User Answer List (JSON)
      */
-    private Object answers;
+    private List<String> answers;
 
     /**
      * Result ID
