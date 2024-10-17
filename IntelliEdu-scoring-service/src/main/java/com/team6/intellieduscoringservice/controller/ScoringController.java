@@ -36,10 +36,9 @@ public class ScoringController {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
 
-        // entity -> dto
+        // dto -> entity
         Scoring scoring = new Scoring();
         BeanUtils.copyProperties(addMyScoringRequest, scoring);
-        scoring.setResultAttributes(addMyScoringRequest.getResultAttributes());
 
 
         // 数据校验
