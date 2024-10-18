@@ -67,6 +67,7 @@
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>
 
+
         <!-- Nacos Discovery -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

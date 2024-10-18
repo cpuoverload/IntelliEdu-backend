@@ -75,27 +75,27 @@ public class ScoringServiceImpl extends ServiceImpl<ScoringMapper, Scoring>
             return queryWrapper;
         }
 //  从对象中取值
-        Long id = listMyScoringRequest.getId();
-        String resultName = listMyScoringRequest.getResultName();
-        String detail = listMyScoringRequest.getResultDetail();
-        String attributes = listMyScoringRequest.getResultAttributes().toString();
-        Integer threshold = listMyScoringRequest.getResultThreshold();
-        Long appId = listMyScoringRequest.getAppId();
-        Long userId = listMyScoringRequest.getUserId();
+//        Long id = listMyScoringRequest.getId();
+//        String resultName = listMyScoringRequest.getResultName();
+//        String detail = listMyScoringRequest.getResultDetail();
+//        String attributes = listMyScoringRequest.getResultAttributes().toString();
+//        Integer threshold = listMyScoringRequest.getResultThreshold();
+//        Long appId = listMyScoringRequest.getAppId();
+//        Long userId = listMyScoringRequest.getUserId();
 
 
         //  补充需要的查询条件
 
         // 模糊查询
-        queryWrapper.like(StringUtils.isNotBlank(attributes), "result_attributes", attributes);
-        queryWrapper.like(StringUtils.isNotBlank(resultName), "result_name", resultName);
-        queryWrapper.like(StringUtils.isNotBlank(detail), "result_detail", detail);
-
-        // 精确查询
-        queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "user_id", userId);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(appId), "app_id", appId);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(threshold), "result_threshold", threshold);
+//        queryWrapper.like(StringUtils.isNotBlank(attributes), "result_attributes", attributes);
+//        queryWrapper.like(StringUtils.isNotBlank(resultName), "result_name", resultName);
+//        queryWrapper.like(StringUtils.isNotBlank(detail), "result_detail", detail);
+//
+//        // 精确查询
+//        queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
+//        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "user_id", userId);
+//        queryWrapper.eq(ObjectUtils.isNotEmpty(appId), "app_id", appId);
+//        queryWrapper.eq(ObjectUtils.isNotEmpty(threshold), "result_threshold", threshold);
 
 
         return queryWrapper;
@@ -108,27 +108,27 @@ public class ScoringServiceImpl extends ServiceImpl<ScoringMapper, Scoring>
             return queryWrapper;
         }
 //  从对象中取值
-        Long id = listScoringRequest.getId();
-        String resultName = listScoringRequest.getResultName();
-        String detail = listScoringRequest.getResultDetail();
-        String attributes = listScoringRequest.getResultAttributes().toString();
-        Integer threshold = listScoringRequest.getResultThreshold();
-        Long appId = listScoringRequest.getAppId();
-        Long userId = listScoringRequest.getUserId();
+//        Long id = listScoringRequest.getId();
+//        String resultName = listScoringRequest.getResultName();
+//        String detail = listScoringRequest.getResultDetail();
+//        String attributes = listScoringRequest.getResultAttributes().toString();
+//        Integer threshold = listScoringRequest.getResultThreshold();
+//        Long appId = listScoringRequest.getAppId();
+//        Long userId = listScoringRequest.getUserId();
 
 
         //  补充需要的查询条件
 
         // 模糊查询
-        queryWrapper.like(StringUtils.isNotBlank(attributes), "result_attributes", attributes);
-        queryWrapper.like(StringUtils.isNotBlank(resultName), "result_name", resultName);
-        queryWrapper.like(StringUtils.isNotBlank(detail), "result_detail", detail);
-
-        // 精确查询
-        queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "user_id", userId);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(appId), "app_id", appId);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(threshold), "result_threshold", threshold);
+//        queryWrapper.like(StringUtils.isNotBlank(attributes), "result_attributes", attributes);
+//        queryWrapper.like(StringUtils.isNotBlank(resultName), "result_name", resultName);
+//        queryWrapper.like(StringUtils.isNotBlank(detail), "result_detail", detail);
+//
+//        // 精确查询
+//        queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
+//        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "user_id", userId);
+//        queryWrapper.eq(ObjectUtils.isNotEmpty(appId), "app_id", appId);
+//        queryWrapper.eq(ObjectUtils.isNotEmpty(threshold), "result_threshold", threshold);
 
 
         return queryWrapper;
@@ -138,7 +138,7 @@ public class ScoringServiceImpl extends ServiceImpl<ScoringMapper, Scoring>
     @Override
     public ScoringVo getScoringVo(Scoring scoring, HttpServletRequest request) {
         // 对象转封装类
-        ScoringVo scoringVo = ScoringVo.objToVo(scoring);
+        ScoringVo scoringVo = new ScoringVo();
 
         //  可以根据需要为封装对象补充值，不需要的内容可以删除
         // 1. 关联查询用户信息

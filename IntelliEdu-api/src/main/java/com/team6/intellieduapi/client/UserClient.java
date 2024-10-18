@@ -1,11 +1,9 @@
 package com.team6.intellieduapi.client;
 
 import com.team6.intellieducommon.utils.ApiResponse;
-import com.team6.intelliedumodel.entity.User;
 import com.team6.intelliedumodel.vo.UserVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
