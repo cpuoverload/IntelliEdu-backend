@@ -12,7 +12,8 @@ import com.team6.intellieduapplicationservice.service.QuestionService;
 import com.team6.intellieducommon.utils.BusinessException;
 import com.team6.intellieducommon.utils.Err;
 import com.team6.intellieducommon.utils.IdRequest;
-import com.team6.intelliedumodel.dto.question.ListMyQuestionRequest;
+import com.team6.intelliedumodel.dto.question.GetMyQuestionRequest;
+import com.team6.intelliedumodel.dto.question.GetPublicQuestionRequest;
 import com.team6.intelliedumodel.dto.question.ListQuestionRequest;
 import com.team6.intelliedumodel.dto.question.QuestionContent;
 import com.team6.intelliedumodel.entity.Question;
@@ -57,9 +58,29 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
      * @return
      */
     public QuestionVo entityToVo(Question question) {
+        if (question == null) {
+            return null;
+        }
         QuestionVo questionVo = new QuestionVo();
         BeanUtils.copyProperties(question, questionVo);
         return questionVo;
+    }
+
+    @Override
+    public QuestionVo getPublicQuestion(GetPublicQuestionRequest getPublicQuestionRequest) {
+        // 1. validation
+        if (getPublicQuestionRequest == null || getPublicQuestionRequest.getAppId() == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+
+        // 2. query
+        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+        queryWrapper
+                .eq("app_id", getPublicQuestionRequest.getAppId());
+        Question question = getOne(queryWrapper);
+
+        // 3. convert entity to vo
+        return entityToVo(question);
     }
 
     @Override
@@ -76,35 +97,22 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     }
 
     @Override
-    public Page<QuestionVo> listMyQuestion(ListMyQuestionRequest listMyQuestionRequest, HttpServletRequest request) {
+    public QuestionVo getMyQuestion(GetMyQuestionRequest getMyQuestionRequest, HttpServletRequest request) {
         // 1. validation
-        if (listMyQuestionRequest == null || listMyQuestionRequest.getAppId() == null) {
+        if (getMyQuestionRequest == null || getMyQuestionRequest.getAppId() == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
 
-        // 2. set page info
-        Long current = listMyQuestionRequest.getCurrent();
-        Long pageSize = listMyQuestionRequest.getPageSize();
-        IPage<Question> page = new Page<>(current, pageSize);
-
+        // 2. query
         Long userId = userClient.getLoginUserId(request);
-
-        // 3. paged query
-        // 由于不是所有字段都是精确查询，有的字段需要模糊查询，有的字段需要排序，所以不能简单地写成 new QueryWrapper(entity)
-        // sortField 是动态传入的列名，无法使用 LambdaQueryWrapper
         QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
         queryWrapper
-                .eq("app_id", listMyQuestionRequest.getAppId())
-                .eq("user_id", userId)
-                .orderBy(listMyQuestionRequest.getSortField() != null, listMyQuestionRequest.getIsAscend(), StrUtil.toUnderlineCase(listMyQuestionRequest.getSortField()));
-        IPage<Question> questionPage = page(page, queryWrapper);
+                .eq("app_id", getMyQuestionRequest.getAppId())
+                .eq("user_id", userId);
+        Question question = getOne(queryWrapper);
 
-        // 4. convert entity to vo
-        Page<QuestionVo> questionVoPage = new Page<>(current, pageSize, questionPage.getTotal());
-        List<QuestionVo> voRecords = questionPage.getRecords().stream().map(this::entityToVo).collect(Collectors.toList());
-        questionVoPage.setRecords(voRecords);
-
-        return questionVoPage;
+        // 3. convert entity to vo
+        return entityToVo(question);
     }
 
     @Override

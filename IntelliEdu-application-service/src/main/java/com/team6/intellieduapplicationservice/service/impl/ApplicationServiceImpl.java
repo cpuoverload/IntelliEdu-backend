@@ -14,6 +14,7 @@ import com.team6.intellieducommon.utils.Err;
 import com.team6.intellieducommon.utils.IdRequest;
 import com.team6.intelliedumodel.dto.application.ListAppRequest;
 import com.team6.intelliedumodel.dto.application.ListMyAppRequest;
+import com.team6.intelliedumodel.dto.application.ListPublicAppRequest;
 import com.team6.intelliedumodel.entity.Application;
 import com.team6.intelliedumodel.enums.AppType;
 import com.team6.intelliedumodel.enums.AuditStatus;
@@ -64,6 +65,30 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
         ApplicationVo applicationVo = new ApplicationVo();
         BeanUtils.copyProperties(application, applicationVo);
         return applicationVo;
+    }
+
+    @Override
+    public Page<ApplicationVo> listPublicApplication(ListPublicAppRequest listPublicAppRequest) {
+        // 1. set page info
+        Long current = listPublicAppRequest.getCurrent();
+        Long pageSize = listPublicAppRequest.getPageSize();
+        IPage<Application> page = new Page<>(current, pageSize);
+
+        // 2. paged query
+        QueryWrapper<Application> queryWrapper = new QueryWrapper<>();
+        // only can see approved applications
+        queryWrapper
+                .like(StringUtils.isNotBlank(listPublicAppRequest.getAppName()), "app_name", listPublicAppRequest.getAppName())
+                .eq("audit_status", AuditStatus.APPROVED.getCode())
+                .orderBy(listPublicAppRequest.getSortField() != null, listPublicAppRequest.getIsAscend(), StrUtil.toUnderlineCase(listPublicAppRequest.getSortField()));
+        IPage<Application> applicationPage = page(page, queryWrapper);
+
+        // 3. convert entity to vo
+        Page<ApplicationVo> applicationVoPage = new Page<>(current, pageSize, applicationPage.getTotal());
+        List<ApplicationVo> voRecords = applicationPage.getRecords().stream().map(this::entityToVo).collect(Collectors.toList());
+        applicationVoPage.setRecords(voRecords);
+
+        return applicationVoPage;
     }
 
     @Override

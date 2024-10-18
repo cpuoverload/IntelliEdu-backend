@@ -25,6 +25,16 @@ public class ApplicationController {
     @Resource
     private ApplicationService applicationService;
 
+    // 查看主页的应用列表
+    @PostMapping("/list/public")
+    public ApiResponse<Page<ApplicationVo>> listPublicApplication(@RequestBody ListPublicAppRequest listPublicAppRequest) {
+        if (listPublicAppRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Page<ApplicationVo> applicationVoPage = applicationService.listPublicApplication(listPublicAppRequest);
+        return ApiResponse.success(applicationVoPage);
+    }
+
     // 普通用户创建应用
     @PostMapping("/add/me")
     public ApiResponse<Boolean> addMyApplication(@RequestBody AddMyAppRequest addMyAppRequest, HttpServletRequest request) {
@@ -43,7 +53,7 @@ public class ApplicationController {
         return ApiResponse.success(true);
     }
 
-    // 普通用户查看应用列表
+    // 普通用户查看自己的应用列表
     @PostMapping("/list/me")
     public ApiResponse<Page<ApplicationVo>> listMyApplication(@RequestBody ListMyAppRequest listMyAppRequest, HttpServletRequest request) {
         if (listMyAppRequest == null) {

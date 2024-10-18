@@ -25,6 +25,16 @@ public class QuestionController {
     @Resource
     private QuestionService questionService;
 
+    // 获取一个应用的题目列表（不要分页）
+    @PostMapping("/get/public")
+    public ApiResponse<QuestionVo> getPublicQuestionOfOneApp(@RequestBody GetPublicQuestionRequest getPublicQuestionRequest) {
+        if (getPublicQuestionRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        QuestionVo questionVo = questionService.getPublicQuestion(getPublicQuestionRequest);
+        return ApiResponse.success(questionVo);
+    }
+
     // 普通用户创建题目
     @PostMapping("/add/me")
     public ApiResponse<Boolean> addMyQuestion(@RequestBody AddMyQuestionRequest addMyQuestionRequest, HttpServletRequest request) {
@@ -43,14 +53,14 @@ public class QuestionController {
         return ApiResponse.success(true);
     }
 
-    // 普通用户查看题目列表
-    @PostMapping("/list/me")
-    public ApiResponse<Page<QuestionVo>> listMyQuestion(@RequestBody ListMyQuestionRequest listMyQuestionRequest, HttpServletRequest request) {
-        if (listMyQuestionRequest == null) {
+    // 普通用户查看自己的题目（只允许每次查询一个应用的题目，不要分页）
+    @PostMapping("/get/me")
+    public ApiResponse<QuestionVo> getMyQuestionOfOneApp(@RequestBody GetMyQuestionRequest getMyQuestionRequest, HttpServletRequest request) {
+        if (getMyQuestionRequest == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
-        Page<QuestionVo> questionVoPage = questionService.listMyQuestion(listMyQuestionRequest, request);
-        return ApiResponse.success(questionVoPage);
+        QuestionVo questionVo = questionService.getMyQuestion(getMyQuestionRequest, request);
+        return ApiResponse.success(questionVo);
     }
 
     // 普通用户更新题目
