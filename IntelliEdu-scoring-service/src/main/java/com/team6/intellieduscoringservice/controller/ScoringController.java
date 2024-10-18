@@ -27,7 +27,7 @@ public class ScoringController {
     private ScoringService scoringService;
 
     @Resource
-    private UserClient userService;
+    private UserClient userClient;
 
     // 普通用户添加评分规则
     @PostMapping("/add/me")
@@ -45,7 +45,7 @@ public class ScoringController {
         scoringService.validScoring(scoring, true);
 
         //  填充默认值
-        scoring.setUserId(userService.getLoginUserId(request));
+        scoring.setUserId(userClient.getLoginUserId(request));
         // 写入数据库
         boolean result = scoringService.save(scoring);
         if (result == false) {
@@ -63,7 +63,7 @@ public class ScoringController {
         }
 
         // 只查询当前登录用户的数据
-        listMyScoringRequest.setUserId(userService.getLoginUserId(request));
+//        listMyScoringRequest.setUserId(userService.getLoginUserId(request));
         long current = listMyScoringRequest.getCurrent();
         long size = listMyScoringRequest.getPageSize();
 
@@ -115,7 +115,7 @@ public class ScoringController {
             throw new BusinessException(Err.SYSTEM_ERROR, "评分规则不存在");
         }
         // 仅本人可删除
-        if (!oldScoring.getUserId().equals(userService.getLoginUserId(request))) {
+        if (!oldScoring.getUserId().equals(userClient.getLoginUserId(request))) {
             throw new BusinessException(Err.FORBIDDEN_ERROR, "不是本人无法删除");
         }
         // 操作数据库
@@ -144,7 +144,7 @@ public class ScoringController {
         scoringService.validScoring(scoring, true);
 
         //  填充默认值
-        scoring.setUserId(userService.getLoginUserId(request));
+        scoring.setUserId(userClient.getLoginUserId(request));
         // 写入数据库
         boolean result = scoringService.save(scoring);
         if (result == false) {
@@ -202,7 +202,7 @@ public class ScoringController {
     // 管理员删除评分规则
     @PostMapping("/delete")
     public ApiResponse<Boolean> deleteScoring(@RequestBody IdRequest idRequest, HttpServletRequest request) {
-        long userId = userService.getLoginUserId(request);
+        long userId = userClient.getLoginUserId(request);
         long id = idRequest.getId();
 
         if (idRequest == null || id <= 0) {
@@ -214,7 +214,7 @@ public class ScoringController {
             throw new BusinessException(Err.SYSTEM_ERROR, "评分规则不存在");
         }
         // 仅管理员可删除
-        String userRole = userService.getMyInfo(request).getData().getRole();
+        String userRole = userClient.getMyInfo(request).getData().getRole();
         if (!"admin".equals(userRole)) {
             throw new BusinessException(Err.FORBIDDEN_ERROR, "不是管理员无法删除");
         }
