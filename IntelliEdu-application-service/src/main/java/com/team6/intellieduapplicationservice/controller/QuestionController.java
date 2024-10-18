@@ -1,58 +1,121 @@
 package com.team6.intellieduapplicationservice.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.team6.intellieduapplicationservice.service.QuestionService;
 import com.team6.intellieducommon.utils.ApiResponse;
+import com.team6.intellieducommon.utils.BusinessException;
+import com.team6.intellieducommon.utils.Err;
 import com.team6.intellieducommon.utils.IdRequest;
 import com.team6.intelliedumodel.dto.question.*;
+import com.team6.intelliedumodel.entity.Question;
 import com.team6.intelliedumodel.vo.QuestionVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/question")
 public class QuestionController {
 
+    @Resource
+    private QuestionService questionService;
+
     // 普通用户创建题目
     @PostMapping("/add/me")
-    public ApiResponse<Boolean> addMyQuestion(@RequestBody AddMyQuestionRequest addMyQuestionRequest) {
+    public ApiResponse<Boolean> addMyQuestion(@RequestBody AddMyQuestionRequest addMyQuestionRequest, HttpServletRequest request) {
+        if (addMyQuestionRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        if (addMyQuestionRequest.getQuestions() == null || addMyQuestionRequest.getAppId() == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Question question = new Question();
+        BeanUtils.copyProperties(addMyQuestionRequest, question);
+        Boolean success = questionService.addMyQuestion(question, request);
+        if (!success) {
+            throw new BusinessException(Err.SYSTEM_ERROR);
+        }
         return ApiResponse.success(true);
     }
 
     // 普通用户查看题目列表
     @PostMapping("/list/me")
-    public ApiResponse<Page<QuestionVo>> listMyQuestion(@RequestBody ListMyQuestionRequest listMyQuestionRequest) {
-        return ApiResponse.success(new Page<>());
+    public ApiResponse<Page<QuestionVo>> listMyQuestion(@RequestBody ListMyQuestionRequest listMyQuestionRequest, HttpServletRequest request) {
+        if (listMyQuestionRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Page<QuestionVo> questionVoPage = questionService.listMyQuestion(listMyQuestionRequest, request);
+        return ApiResponse.success(questionVoPage);
     }
 
     // 普通用户更新题目
     @PostMapping("/update/me")
-    public ApiResponse<Boolean> updateMyQuestion(@RequestBody UpdateMyQuestionRequest updateMyQuestionRequest) {
+    public ApiResponse<Boolean> updateMyQuestion(@RequestBody UpdateMyQuestionRequest updateMyQuestionRequest, HttpServletRequest request) {
+        if (updateMyQuestionRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Question question = new Question();
+        BeanUtils.copyProperties(updateMyQuestionRequest, question);
+        Boolean success = questionService.updateMyQuestion(question, request);
+        if (!success) {
+            throw new BusinessException(Err.SYSTEM_ERROR);
+        }
         return ApiResponse.success(true);
     }
 
     // 普通用户删除题目
     @PostMapping("/delete/me")
-    public ApiResponse<Boolean> deleteMyQuestion(@RequestBody IdRequest idRequest) {
+    public ApiResponse<Boolean> deleteMyQuestion(@RequestBody IdRequest idRequest, HttpServletRequest request) {
+        if (idRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Boolean success = questionService.deleteMyQuestion(idRequest, request);
+        if (!success) {
+            throw new BusinessException(Err.SYSTEM_ERROR);
+        }
         return ApiResponse.success(true);
     }
 
     // 管理员查看题目列表
     @PostMapping("/list")
     public ApiResponse<Page<QuestionVo>> listQuestion(@RequestBody ListQuestionRequest listQuestionRequest) {
-        return ApiResponse.success(new Page<>());
+        if (listQuestionRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Page<QuestionVo> questionVoPage = questionService.listQuestion(listQuestionRequest);
+        return ApiResponse.success(questionVoPage);
     }
 
     // 管理员更新题目
     @PostMapping("/update")
     public ApiResponse<Boolean> updateQuestion(@RequestBody UpdateQuestionRequest updateQuestionRequest) {
+        if (updateQuestionRequest == null || updateQuestionRequest.getId() == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Question question = new Question();
+        BeanUtils.copyProperties(updateQuestionRequest, question);
+        Boolean success = questionService.updateQuestion(question);
+        if (!success) {
+            throw new BusinessException(Err.SYSTEM_ERROR);
+        }
         return ApiResponse.success(true);
     }
 
     // 管理员删除题目
     @PostMapping("/delete")
     public ApiResponse<Boolean> deleteQuestion(@RequestBody IdRequest idRequest) {
+        if (idRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Boolean success = questionService.deleteQuestion(idRequest);
+        if (!success) {
+            throw new BusinessException(Err.SYSTEM_ERROR);
+        }
         return ApiResponse.success(true);
     }
 }
