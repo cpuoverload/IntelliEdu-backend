@@ -17,10 +17,5 @@ public class UpdateQuestionRequest implements Serializable {
      */
     private List<QuestionContent> questions;
 
-    /**
-     * Application ID
-     */
-    private Long appId;
-
     private static final long serialVersionUID = 635214537138480251L;
 }

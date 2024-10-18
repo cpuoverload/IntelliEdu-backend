@@ -8,14 +8,14 @@ import java.util.List;
 @Data
 public class UpdateMyQuestionRequest implements Serializable {
     /**
+     * ID
+     */
+    private Long id;
+
+    /**
      * Question List (JSON)
      */
     private List<QuestionContent> questions;
-
-    /**
-     * Application ID
-     */
-    private Long appId;
 
     private static final long serialVersionUID = -8662446364556125167L;
 }
