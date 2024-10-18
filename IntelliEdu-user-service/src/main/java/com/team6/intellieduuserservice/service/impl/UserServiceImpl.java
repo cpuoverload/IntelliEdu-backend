@@ -158,10 +158,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public Page<UserVo> listUser(ListUserRequest listUserRequest) {
+        // 1. set page info
         Long current = listUserRequest.getCurrent();
         Long pageSize = listUserRequest.getPageSize();
         IPage<User> page = new Page<>(current, pageSize);
 
+        // 2. paged query
         // 由于不是所有字段都是精确查询，有的字段需要模糊查询，有的字段需要排序，所以不能简单地写成 new QueryWrapper(entity)
         // sortField 是动态传入的列名，无法使用 LambdaQueryWrapper
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -171,9 +173,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 .like(StringUtils.isNotBlank(listUserRequest.getNickname()), "nickname", listUserRequest.getNickname())
                 .eq(listUserRequest.getRole() != null, "role", listUserRequest.getRole())
                 .orderBy(listUserRequest.getSortField() != null, listUserRequest.getIsAscend(), StrUtil.toUnderlineCase(listUserRequest.getSortField()));
-
         IPage<User> userPage = this.page(page, queryWrapper);
 
+        // 3. convert entity to vo
         Page<UserVo> userVoPage = new Page<>(current, pageSize, userPage.getTotal());
         List<UserVo> voRecords = userPage.getRecords().stream().map(this::entityToVo).collect(Collectors.toList());
         userVoPage.setRecords(voRecords);

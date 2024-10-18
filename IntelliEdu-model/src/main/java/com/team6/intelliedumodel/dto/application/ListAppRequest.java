@@ -20,11 +20,6 @@ public class ListAppRequest extends TableRequest implements Serializable {
     private String appName;
 
     /**
-     * Application Description
-     */
-    private String description;
-
-    /**
      * Application Type (0 - Grade, 1 - Evaluation)
      */
     private Integer type;

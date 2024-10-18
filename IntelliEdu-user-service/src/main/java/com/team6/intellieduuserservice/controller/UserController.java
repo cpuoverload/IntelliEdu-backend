@@ -145,8 +145,4 @@ public class UserController {
         return ApiResponse.success(true);
     }
 
-    @GetMapping("/test/fegin")
-    public ApiResponse<String> testFegin() {
-        return ApiResponse.success("test fegin success");
-    }
 }
