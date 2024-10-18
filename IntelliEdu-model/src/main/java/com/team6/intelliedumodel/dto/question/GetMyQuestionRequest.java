@@ -1,14 +1,11 @@
 package com.team6.intelliedumodel.dto.question;
 
-import com.team6.intellieducommon.utils.TableRequest;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class ListMyQuestionRequest extends TableRequest implements Serializable {
+public class GetMyQuestionRequest implements Serializable {
     /**
      * Application ID
      */

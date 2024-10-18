@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.team6.intellieducommon.utils.IdRequest;
 import com.team6.intelliedumodel.dto.application.ListAppRequest;
 import com.team6.intelliedumodel.dto.application.ListMyAppRequest;
+import com.team6.intelliedumodel.dto.application.ListPublicAppRequest;
 import com.team6.intelliedumodel.entity.Application;
 import com.team6.intelliedumodel.vo.ApplicationVo;
 
 import javax.servlet.http.HttpServletRequest;
 
 public interface ApplicationService extends IService<Application> {
+    Page<ApplicationVo> listPublicApplication(ListPublicAppRequest listPublicAppRequest);
 
     Boolean addMyApplication(Application application, HttpServletRequest request);
 
