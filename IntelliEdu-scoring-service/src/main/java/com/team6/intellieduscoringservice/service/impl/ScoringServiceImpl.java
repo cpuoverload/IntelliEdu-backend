@@ -1,21 +1,31 @@
 package com.team6.intellieduscoringservice.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.team6.intellieduapi.client.ApplicationClient;
+import com.team6.intellieduapi.client.UserClient;
 import com.team6.intellieducommon.utils.BusinessException;
 import com.team6.intellieducommon.utils.Err;
+import com.team6.intellieducommon.utils.IdRequest;
 import com.team6.intelliedumodel.dto.scoring.ListMyScoringRequest;
 import com.team6.intelliedumodel.dto.scoring.ListScoringRequest;
 import com.team6.intelliedumodel.entity.Scoring;
 import com.team6.intelliedumodel.vo.ScoringVo;
 import com.team6.intellieduscoringservice.mapper.ScoringMapper;
 import com.team6.intellieduscoringservice.service.ScoringService;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author passion
@@ -26,140 +36,193 @@ import javax.servlet.http.HttpServletRequest;
 public class ScoringServiceImpl extends ServiceImpl<ScoringMapper, Scoring>
         implements ScoringService {
 
-//    @Resource
-//    UserService userService;
+    @Resource
+    UserClient userClient;
 
-    @Override
-    public void validScoring(Scoring scoring, boolean isAdd) {
+    @Resource
+    ScoringMapper scoringMapper;
+    @Autowired
+    private ApplicationClient applicationClient;
+
+    public void validate(Scoring scoring) {
         if (scoring == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
-        //  从对象中取值
-        String resultName = scoring.getResultName();
-        String detail = scoring.getResultDetail();
         Long appId = scoring.getAppId();
+        String resultName = scoring.getResultName();
 
-        // 创建数据时，参数不能为空
-        if (isAdd) {
-            //  补充校验规则
-            if (StringUtils.isBlank(resultName)) {
-                throw new BusinessException(Err.PARAMS_ERROR, "结果名称不能为空");
-            }
-            if (StringUtils.isBlank(detail)) {
-                throw new BusinessException(Err.PARAMS_ERROR, "结果描述不能为空");
-            }
-            if (appId == null || appId <= 0) {
-                throw new BusinessException(Err.PARAMS_ERROR, "appId非法");
-            }
+        if (appId != null && appId <= 0) {
+            throw new BusinessException(Err.PARAMS_ERROR, "Application ID is illegal");
         }
-
-        // 修改数据时，有参数则校验
-        //  补充校验规则
-        if (StringUtils.isNotBlank(resultName)) {
-            if (resultName.length() > 128) {
-                throw new BusinessException(Err.PARAMS_ERROR, "结果名称不能超过 128");
-            }
+        if (resultName != null && StringUtils.isBlank(resultName)) {
+            throw new BusinessException(Err.PARAMS_ERROR, "Result name is blank");
         }
-        // todo 应用表的增删改查还没写
-//        if (appId != null) {
-//            App app = appService.getById(appId);
-//            ThrowUtils.throwIf(app == null, ErrorCode.PARAMS_ERROR, "应用不存在");
-//        }
+        if (applicationClient.getApplicationById(appId).getData() == null) {
+            throw new BusinessException(Err.PARAMS_ERROR, "Application does not exist");
+        }
 
     }
 
-    @Override
-    public QueryWrapper<Scoring> getQueryWrapper(ListMyScoringRequest listMyScoringRequest) {
-        QueryWrapper<Scoring> queryWrapper = new QueryWrapper<>();
-        if (listMyScoringRequest == null) {
-            return queryWrapper;
-        }
-//  从对象中取值
-//        Long id = listMyScoringRequest.getId();
-//        String resultName = listMyScoringRequest.getResultName();
-//        String detail = listMyScoringRequest.getResultDetail();
-//        String attributes = listMyScoringRequest.getResultAttributes().toString();
-//        Integer threshold = listMyScoringRequest.getResultThreshold();
-//        Long appId = listMyScoringRequest.getAppId();
-//        Long userId = listMyScoringRequest.getUserId();
-
-
-        //  补充需要的查询条件
-
-        // 模糊查询
-//        queryWrapper.like(StringUtils.isNotBlank(attributes), "result_attributes", attributes);
-//        queryWrapper.like(StringUtils.isNotBlank(resultName), "result_name", resultName);
-//        queryWrapper.like(StringUtils.isNotBlank(detail), "result_detail", detail);
-//
-//        // 精确查询
-//        queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
-//        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "user_id", userId);
-//        queryWrapper.eq(ObjectUtils.isNotEmpty(appId), "app_id", appId);
-//        queryWrapper.eq(ObjectUtils.isNotEmpty(threshold), "result_threshold", threshold);
-
-
-        return queryWrapper;
-    }
-
-    @Override
-    public QueryWrapper<Scoring> getQueryWrapperAdmin(ListScoringRequest listScoringRequest) {
-        QueryWrapper<Scoring> queryWrapper = new QueryWrapper<>();
-        if (listScoringRequest == null) {
-            return queryWrapper;
-        }
-//  从对象中取值
-//        Long id = listScoringRequest.getId();
-//        String resultName = listScoringRequest.getResultName();
-//        String detail = listScoringRequest.getResultDetail();
-//        String attributes = listScoringRequest.getResultAttributes().toString();
-//        Integer threshold = listScoringRequest.getResultThreshold();
-//        Long appId = listScoringRequest.getAppId();
-//        Long userId = listScoringRequest.getUserId();
-
-
-        //  补充需要的查询条件
-
-        // 模糊查询
-//        queryWrapper.like(StringUtils.isNotBlank(attributes), "result_attributes", attributes);
-//        queryWrapper.like(StringUtils.isNotBlank(resultName), "result_name", resultName);
-//        queryWrapper.like(StringUtils.isNotBlank(detail), "result_detail", detail);
-//
-//        // 精确查询
-//        queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
-//        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "user_id", userId);
-//        queryWrapper.eq(ObjectUtils.isNotEmpty(appId), "app_id", appId);
-//        queryWrapper.eq(ObjectUtils.isNotEmpty(threshold), "result_threshold", threshold);
-
-
-        return queryWrapper;
-
-    }
-
-    @Override
-    public ScoringVo getScoringVo(Scoring scoring, HttpServletRequest request) {
-        // 对象转封装类
+    public ScoringVo entityToVo(Scoring scoring) {
         ScoringVo scoringVo = new ScoringVo();
-
-        //  可以根据需要为封装对象补充值，不需要的内容可以删除
-        // 1. 关联查询用户信息
-        Long userId = scoring.getUserId();
-        // todo scoring 和 scoringVo 的区别
-//        User user = null;
-//        if (userId != null && userId > 0) {
-//            user = userService.getById(userId);
-//        }
-//        UserVo userVo = new UserVo();
-//        BeanUtils.copyProperties(user, userVo);
-        scoringVo.setUserId(userId);
-
-
+        BeanUtils.copyProperties(scoring, scoringVo);
         return scoringVo;
     }
 
     @Override
-    public Page<ScoringVo> getScoringVoPage(Page<Scoring> scoringResultPage, HttpServletRequest request) {
-        return null;
+    public Boolean addMyScoring(Scoring scoring, HttpServletRequest request) {
+        // 1. validation
+        validate(scoring);
+
+        // 2. set user id
+        Long userId = userClient.getLoginUserId(request);
+        scoring.setUserId(userId);
+
+        // 3. add application
+        return save(scoring);
     }
+
+    @Override
+    public Boolean deleteMyScoring(IdRequest idRequest, HttpServletRequest request) {
+        // 1. validation
+        if (idRequest == null || idRequest.getId() == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+
+        // 2. check if the Scoring exists
+        Long userId = userClient.getLoginUserId(request);
+        LambdaQueryWrapper<Scoring> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(Scoring::getId, idRequest.getId())
+                .eq(Scoring::getUserId, userId);
+        Scoring scoring = getOne(queryWrapper);
+        if (scoring == null) {
+            throw new BusinessException(Err.NOT_FOUND_ERROR);
+        }
+
+        // 3. delete scoring
+        return removeById(idRequest.getId());
+    }
+
+    @Override
+    public Boolean updateMyScoring(Scoring scoring, HttpServletRequest request) {
+        // 1. validation
+        if (scoring.getId() == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        validate(scoring);
+
+        // 2. check if the scoring exists
+        Long userId = userClient.getLoginUserId(request);
+        LambdaQueryWrapper<Scoring> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(Scoring::getId, scoring.getId())
+                .eq(Scoring::getUserId, userId);
+        Scoring oldScoring = getOne(queryWrapper);
+        if (oldScoring == null) {
+            throw new BusinessException(Err.NOT_FOUND_ERROR);
+        }
+
+        // 3. update application
+        return updateById(scoring);
+    }
+
+    @Override
+    public Page<ScoringVo> listMyScoring(ListMyScoringRequest listMyScoringRequest, HttpServletRequest request) {
+        // 1. set page info
+        Long current = listMyScoringRequest.getCurrent();
+        Long pageSize = listMyScoringRequest.getPageSize();
+        IPage<Scoring> page = new Page<>(current, pageSize);
+
+        Long userId = userClient.getLoginUserId(request);
+
+        // 2. paged query
+        // 由于不是所有字段都是精确查询，有的字段需要模糊查询，有的字段需要排序，所以不能简单地写成 new QueryWrapper(entity)
+        // sortField 是动态传入的列名，无法使用 LambdaQueryWrapper
+        QueryWrapper<Scoring> queryWrapper = new QueryWrapper<>();
+        queryWrapper
+                .eq("user_id", userId)
+                .orderBy(listMyScoringRequest.getSortField() != null, listMyScoringRequest.getIsAscend(), StrUtil.toUnderlineCase(listMyScoringRequest.getSortField()));
+        IPage<Scoring> scoringPage = page(page, queryWrapper);
+
+        // 3. convert entity to vo
+        Page<ScoringVo> scoringVoPage = new Page<>(current, pageSize, scoringPage.getTotal());
+        List<ScoringVo> voRecords = scoringPage.getRecords().stream().map(this::entityToVo).collect(Collectors.toList());
+        scoringVoPage.setRecords(voRecords);
+
+        return scoringVoPage;
+    }
+
+    @Override
+    public Boolean addScoring(Scoring scoring, HttpServletRequest request) {
+        // 1. validation
+        validate(scoring);
+
+        // 2. set user id
+        Long userId = userClient.getLoginUserId(request);
+        scoring.setUserId(userId);
+
+        // 3. add application
+        return save(scoring);
+    }
+
+    @Override
+    public Page<ScoringVo> listScoring(ListScoringRequest listScoringRequest) {
+        // 1. set page info
+        Long current = listScoringRequest.getCurrent();
+        Long pageSize = listScoringRequest.getPageSize();
+        IPage<Scoring> page = new Page<>(current, pageSize);
+
+        // 2. paged query
+        QueryWrapper<Scoring> queryWrapper = new QueryWrapper<>();
+        queryWrapper
+                .eq(listScoringRequest.getAppId() != null, "app_id", listScoringRequest.getAppId())
+                .orderBy(listScoringRequest.getSortField() != null, listScoringRequest.getIsAscend(), StrUtil.toUnderlineCase(listScoringRequest.getSortField()));
+        IPage<Scoring> scoringPage = page(page, queryWrapper);
+
+        // 3. convert entity to vo
+        Page<ScoringVo> scoringVoPage = new Page<>(current, pageSize, scoringPage.getTotal());
+        List<ScoringVo> voRecords = scoringPage.getRecords().stream().map(this::entityToVo).collect(Collectors.toList());
+        scoringVoPage.setRecords(voRecords);
+
+        return scoringVoPage;
+    }
+
+    @Override
+    public Boolean updateScoring(Scoring scoring) {
+        // 1. validation
+        if (scoring.getId() == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        validate(scoring);
+
+        // 2. check if the scoring exists
+        Scoring oldScoring = getById(scoring.getId());
+        if (oldScoring == null) {
+            throw new BusinessException(Err.NOT_FOUND_ERROR);
+        }
+
+        // 3. update scoring
+        return updateById(scoring);
+    }
+
+    @Override
+    public Boolean deleteScoring(IdRequest idRequest) {
+        // 1. validation
+        if (idRequest == null || idRequest.getId() == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+
+        // 2. check if the scoring exists
+        Scoring scoring = getById(idRequest.getId());
+        if (scoring == null) {
+            throw new BusinessException(Err.NOT_FOUND_ERROR);
+        }
+
+        // 3. delete scoring
+        return removeById(idRequest.getId());
+    }
+
 }
 
 

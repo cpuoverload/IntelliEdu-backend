@@ -232,7 +232,7 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
             throw new BusinessException(Err.PARAMS_ERROR);
         }
 
-        // check if the application exists
+        // 2. check if the application exists
         Application application = getById(idRequest.getId());
         if (application == null) {
             throw new BusinessException(Err.NOT_FOUND_ERROR);
