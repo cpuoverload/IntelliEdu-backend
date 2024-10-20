@@ -96,7 +96,7 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
     }
 
     @Override
-    public Boolean addMyApplication(Application application, HttpServletRequest request) {
+    public Long addMyApplication(Application application, HttpServletRequest request) {
         // 1. validation
         validate(application);
 
@@ -105,7 +105,13 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
         application.setUserId(userId);
 
         // 3. add application
-        return save(application);
+        boolean success = save(application);
+        if (!success) {
+            throw new BusinessException(Err.SYSTEM_ERROR);
+        }
+
+        // 4. return application id
+        return application.getId();
     }
 
     @Override

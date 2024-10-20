@@ -34,7 +34,7 @@ public class ApplicationController {
 
     // 普通用户创建应用
     @PostMapping("/add/me")
-    public ApiResponse<Boolean> addMyApplication(@RequestBody AddMyAppRequest addMyAppRequest, HttpServletRequest request) {
+    public ApiResponse<Long> addMyApplication(@RequestBody AddMyAppRequest addMyAppRequest, HttpServletRequest request) {
         if (addMyAppRequest == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
@@ -43,11 +43,8 @@ public class ApplicationController {
         }
         Application application = new Application();
         BeanUtils.copyProperties(addMyAppRequest, application);
-        Boolean success = applicationService.addMyApplication(application, request);
-        if (!success) {
-            throw new BusinessException(Err.SYSTEM_ERROR);
-        }
-        return ApiResponse.success(true);
+        Long appId = applicationService.addMyApplication(application, request);
+        return ApiResponse.success(appId);
     }
 
     // 普通用户查看自己的应用列表
