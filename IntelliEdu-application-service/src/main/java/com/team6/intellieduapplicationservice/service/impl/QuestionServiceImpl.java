@@ -88,11 +88,20 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         // 1. validation
         validate(question);
 
-        // 2. set user id
+        // 2. check if the app's question exists
+        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+        queryWrapper
+                .eq("app_id", question.getAppId());
+        Question oldQuestion = getOne(queryWrapper);
+        if (oldQuestion != null) {
+            throw new BusinessException(Err.EXISTED_ERROR, "The question of the app already exists");
+        }
+
+        // 3. set user id
         Long userId = userClient.getLoginUserId(request);
         question.setUserId(userId);
 
-        // 3. add question
+        // 4. add question
         return save(question);
     }
 
