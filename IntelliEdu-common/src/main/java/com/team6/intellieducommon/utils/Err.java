@@ -14,7 +14,8 @@ public enum Err {
     PASSWORD_ERROR(10007, "Password error"),
     DELETE_ERROR(10008, "Delete failed"),
     UPDATE_ERROR(10009, "Update failed"),
-    NOT_FOUND_ERROR(10010, "Not found");
+    NOT_FOUND_ERROR(10010, "Not found"),
+    EXISTED_ERROR(10011, "Already existed");
 
     private final int code;
     private final String message;
