@@ -15,6 +15,11 @@ public class UpdateMyScoringRequest implements Serializable {
     private Long id;
 
     /**
+     * Application ID
+     */
+    private Long appId;
+
+    /**
      * Result name
      */
     private String resultName;

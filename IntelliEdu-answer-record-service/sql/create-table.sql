@@ -11,7 +11,7 @@ create table if not exists answer_record
     `strategy`         tinyint  default 0                 not null comment 'Scoring Strategy (0 - Custom, 1 - AI)',
     `answers`          json                               null comment 'User Answer List (JSON)',
     `result_id`        bigint                             null comment 'Result ID',
-    `result_name`      varchar(128)                       not null comment 'Result name',
+    `result_name`      varchar(128)                       null comment 'Result name',
     `result_detail`    text                               null comment 'Result Detail',
     `result_image_url` varchar(1024)                      null comment 'Result Image URL',
     `result_grade`     int                                null comment 'Result Grade, Intended For Grade-Type Applications',

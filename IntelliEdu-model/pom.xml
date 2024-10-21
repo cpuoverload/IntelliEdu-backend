@@ -18,17 +18,17 @@
     </properties>
 
     <dependencies>
-        <!-- IntelliEdu common -->
-        <dependency>
-            <groupId>com.team6</groupId>
-            <artifactId>IntelliEdu-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
 
         <!-- MyBatis-Plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.team6</groupId>
+            <artifactId>IntelliEdu-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

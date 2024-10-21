@@ -1,7 +1,9 @@
 package com.team6.intelliedumodel.vo;
 
 import com.team6.intelliedumodel.dto.question.QuestionContent;
+import com.team6.intelliedumodel.entity.Question;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -38,6 +40,15 @@ public class QuestionVo implements Serializable {
      * Update Time
      */
     private Date updateTime;
+
+    public static QuestionVo objToVo(Question question){
+        if (question == null) {
+            return null;
+        }
+        QuestionVo questionVo = new QuestionVo();
+        BeanUtils.copyProperties(question, questionVo);
+        return questionVo;
+    }
 
     private static final long serialVersionUID = -2294546556817718253L;
 }

@@ -22,5 +22,4 @@ public interface UserClient {
         UserVo userVo = (UserVo) request.getSession().getAttribute("loginUser");
         return ApiResponse.success(userVo);
     }
-
 }

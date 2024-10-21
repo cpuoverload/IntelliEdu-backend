@@ -10,10 +10,7 @@ import com.team6.intelliedumodel.dto.application.*;
 import com.team6.intelliedumodel.entity.Application;
 import com.team6.intelliedumodel.vo.ApplicationVo;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -139,6 +136,11 @@ public class ApplicationController {
             throw new BusinessException(Err.SYSTEM_ERROR);
         }
         return ApiResponse.success(true);
+    }
+
+    @GetMapping("/get/{id}")
+    ApiResponse<Application> getApplicationById(@PathVariable Long id){
+        return ApiResponse.success(applicationService.getApplicationById(id));
     }
 
 }

@@ -22,6 +22,7 @@ import com.team6.intelliedumodel.enums.ScoringStrategy;
 import com.team6.intelliedumodel.vo.ApplicationVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,6 +37,8 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
 
     @Resource
     private UserClient userClient;
+    @Resource
+    private ApplicationMapper applicationMapper;
 
     public void validate(Application application) {
         if (application == null) {
@@ -58,6 +61,7 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
 
     /**
      * convert entity to vo
+     *
      * @param application
      * @return
      */
@@ -235,7 +239,7 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
             throw new BusinessException(Err.PARAMS_ERROR);
         }
 
-        // check if the application exists
+        // 2. check if the application exists
         Application application = getById(idRequest.getId());
         if (application == null) {
             throw new BusinessException(Err.NOT_FOUND_ERROR);
@@ -268,6 +272,15 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
 
         // 4. update application
         return updateById(application);
+    }
+
+    @Override
+    public Application getApplicationById(Long id) {
+        if (id != null && id > 0) {
+            return applicationMapper.selectById(id);
+        }
+
+        return null;
     }
 
 

@@ -29,4 +29,6 @@ public interface ApplicationService extends IService<Application> {
     Boolean deleteApplication(IdRequest idRequest);
 
     Boolean auditApplication(Application application, HttpServletRequest request);
+
+    Application getApplicationById(Long id);
 }
