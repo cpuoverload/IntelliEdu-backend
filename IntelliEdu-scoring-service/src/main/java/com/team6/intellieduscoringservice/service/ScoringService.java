@@ -1,16 +1,15 @@
 package com.team6.intellieduscoringservice.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.team6.intellieducommon.utils.IdRequest;
 import com.team6.intelliedumodel.dto.scoring.ListMyScoringRequest;
 import com.team6.intelliedumodel.dto.scoring.ListScoringRequest;
 import com.team6.intelliedumodel.entity.Scoring;
-import com.team6.intelliedumodel.vo.ApplicationVo;
 import com.team6.intelliedumodel.vo.ScoringVo;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author passion
@@ -21,6 +20,8 @@ public interface ScoringService extends IService<Scoring> {
 
 
     Boolean addMyScoring(Scoring scoring, HttpServletRequest request);
+
+    Boolean addMyScoringBatch(List<Scoring> scoringList, HttpServletRequest request);
 
     Boolean deleteMyScoring(IdRequest idRequest, HttpServletRequest request);
 
