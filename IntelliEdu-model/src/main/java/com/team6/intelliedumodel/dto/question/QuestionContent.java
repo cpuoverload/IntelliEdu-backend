@@ -40,7 +40,7 @@ public class QuestionContent {
         /**
          * 选项对应分值（打分类应用使用）
          */
-        private int grade;
+        private Integer grade;
 
         /**
          * 选项对应的测评结果（测评类应用使用）
