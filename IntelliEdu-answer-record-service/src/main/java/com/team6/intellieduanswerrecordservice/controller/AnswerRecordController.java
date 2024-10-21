@@ -48,19 +48,34 @@ public class AnswerRecordController {
 
     // 普通用户查看答题记录
     @PostMapping("/list/me")
-    public ApiResponse<Page<AnswerRecordVo>> listMyAnswerRecord(@RequestBody ListMyAnswerRequest listMyAnswerRequest) {
-        return ApiResponse.success(new Page<>());
+    public ApiResponse<Page<AnswerRecordVo>> listMyAnswerRecord(@RequestBody ListMyAnswerRequest listMyAnswerRequest, HttpServletRequest request) {
+        if (listMyAnswerRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Page<AnswerRecordVo> answerRecordVoPage = answerRecordService.listMyAnswerRecord(listMyAnswerRequest, request);
+        return ApiResponse.success(answerRecordVoPage);
     }
 
     // 管理员查看答题记录
     @PostMapping("/list")
     public ApiResponse<Page<AnswerRecordVo>> listAnswerRecord(@RequestBody ListAnswerRequest listAnswerRequest) {
-        return ApiResponse.success(new Page<>());
+        if (listAnswerRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Page<AnswerRecordVo> answerRecordVoPage = answerRecordService.listAnswerRecord(listAnswerRequest);
+        return ApiResponse.success(answerRecordVoPage);
     }
 
     // 管理员删除答题记录
     @PostMapping("/delete")
     public ApiResponse<Boolean> deleteAnswerRecord(@RequestBody IdRequest idRequest) {
+        if (idRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        Boolean success = answerRecordService.deleteAnswerRecord(idRequest);
+        if (!success) {
+            throw new BusinessException(Err.SYSTEM_ERROR);
+        }
         return ApiResponse.success(true);
     }
 }
