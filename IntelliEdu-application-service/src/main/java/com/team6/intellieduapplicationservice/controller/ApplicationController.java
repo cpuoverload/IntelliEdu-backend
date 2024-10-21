@@ -139,7 +139,7 @@ public class ApplicationController {
     }
 
     @GetMapping("/get/{id}")
-    ApiResponse<Application> getApplicationById(Long id){
+    ApiResponse<Application> getApplicationById(@PathVariable Long id){
         return ApiResponse.success(applicationService.getApplicationById(id));
     }
 
