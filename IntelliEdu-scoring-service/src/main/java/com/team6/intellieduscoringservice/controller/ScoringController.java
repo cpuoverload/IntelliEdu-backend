@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
@@ -49,6 +51,40 @@ public class ScoringController {
         // 写入数据库
         boolean result = scoringService.save(scoring);
         if (result == false) {
+            throw new BusinessException(Err.SYSTEM_ERROR);
+        }
+
+        return ApiResponse.success(true);
+    }
+
+    // 普通用户批量添加评分规则
+    @PostMapping("/add/me/batch")
+    public ApiResponse<Boolean> addMyScoringBatch(@RequestBody AddMyScoringBatchRequest addMyScoringBatchRequest, HttpServletRequest request) {
+        if (addMyScoringBatchRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+
+        List<AddMyScoringRequest> scoringsRequest = addMyScoringBatchRequest.getScorings();
+
+        List<Scoring> scoringList = scoringsRequest.stream()
+                .map(scoringRequest -> {
+                    // dto -> entity
+                    Scoring scoring = new Scoring();
+                    BeanUtils.copyProperties(scoringRequest, scoring);
+
+                    // 数据校验
+                    scoringService.validScoring(scoring, true);
+
+                    // 填充默认值
+                    scoring.setUserId(userClient.getLoginUserId(request));
+
+                    return scoring;
+                })
+                .collect(Collectors.toList());
+
+        // 写入数据库
+        boolean result = scoringService.saveBatch(scoringList);
+        if (!result) {
             throw new BusinessException(Err.SYSTEM_ERROR);
         }
 
