@@ -2,7 +2,10 @@ package com.team6.intellieduscoringservice.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team6.intellieduapi.client.ApplicationClient;
-import com.team6.intellieducommon.utils.*;
+import com.team6.intellieducommon.utils.ApiResponse;
+import com.team6.intellieducommon.utils.BusinessException;
+import com.team6.intellieducommon.utils.Err;
+import com.team6.intellieducommon.utils.IdRequest;
 import com.team6.intelliedumodel.dto.scoring.*;
 import com.team6.intelliedumodel.entity.AnswerRecord;
 import com.team6.intelliedumodel.entity.Application;
@@ -61,7 +64,7 @@ public class ScoringController {
     // 普通用户批量添加评分规则
     @PostMapping("/add/me/batch")
     public ApiResponse<Boolean> addMyScoringBatch(@RequestBody AddMyScoringBatchRequest addMyScoringBatchRequest, HttpServletRequest request) {
-        if (addMyScoringBatchRequest == null) {
+        if (addMyScoringBatchRequest == null || addMyScoringBatchRequest.getScorings() == null || addMyScoringBatchRequest.getScorings().isEmpty()) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
 
@@ -72,20 +75,13 @@ public class ScoringController {
                     // dto -> entity
                     Scoring scoring = new Scoring();
                     BeanUtils.copyProperties(scoringRequest, scoring);
-
-                    // 数据校验
-                    scoringService.validScoring(scoring, true);
-
-                    // 填充默认值
-                    scoring.setUserId(userClient.getLoginUserId(request));
-
                     return scoring;
+
                 })
                 .collect(Collectors.toList());
 
-        // 写入数据库
-        boolean result = scoringService.saveBatch(scoringList);
-        if (!result) {
+        boolean success = scoringService.addMyScoringBatch(scoringList, request);
+        if (!success) {
             throw new BusinessException(Err.SYSTEM_ERROR);
         }
 

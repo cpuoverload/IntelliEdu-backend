@@ -80,6 +80,16 @@ public class ScoringServiceImpl extends ServiceImpl<ScoringMapper, Scoring>
     }
 
     @Override
+    public Boolean addMyScoringBatch(List<Scoring> scoringList, HttpServletRequest request) {
+        for (Scoring scoring : scoringList) {
+            validate(scoring);
+            Long userId = userClient.getLoginUserId(request);
+            scoring.setUserId(userId);
+        }
+        return saveBatch(scoringList);
+    }
+
+    @Override
     public Boolean deleteMyScoring(IdRequest idRequest, HttpServletRequest request) {
         // 1. validation
         if (idRequest == null || idRequest.getId() == null) {
