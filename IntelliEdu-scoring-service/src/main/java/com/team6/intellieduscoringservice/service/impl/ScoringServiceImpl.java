@@ -19,7 +19,6 @@ import com.team6.intellieduscoringservice.mapper.ScoringMapper;
 import com.team6.intellieduscoringservice.service.ScoringService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -40,9 +39,7 @@ public class ScoringServiceImpl extends ServiceImpl<ScoringMapper, Scoring>
     UserClient userClient;
 
     @Resource
-    ScoringMapper scoringMapper;
-    @Autowired
-    private ApplicationClient applicationClient;
+    ApplicationClient applicationClient;
 
     public void validate(Scoring scoring) {
         if (scoring == null) {

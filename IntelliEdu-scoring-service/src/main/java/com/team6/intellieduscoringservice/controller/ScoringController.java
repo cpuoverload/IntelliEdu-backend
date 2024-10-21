@@ -2,22 +2,20 @@ package com.team6.intellieduscoringservice.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team6.intellieduapi.client.ApplicationClient;
-import com.team6.intellieduapi.client.UserClient;
-import com.team6.intellieducommon.utils.ApiResponse;
-import com.team6.intellieducommon.utils.BusinessException;
-import com.team6.intellieducommon.utils.Err;
-import com.team6.intellieducommon.utils.IdRequest;
+import com.team6.intellieducommon.utils.*;
 import com.team6.intelliedumodel.dto.scoring.*;
+import com.team6.intelliedumodel.entity.AnswerRecord;
 import com.team6.intelliedumodel.entity.Application;
 import com.team6.intelliedumodel.entity.Scoring;
-import com.team6.intelliedumodel.vo.ApplicationVo;
 import com.team6.intelliedumodel.vo.ScoringVo;
+import com.team6.intellieduscoringservice.scoring.ScoringStrategyExecutor;
 import com.team6.intellieduscoringservice.service.ScoringService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -26,11 +24,12 @@ public class ScoringController {
     @Resource
     private ScoringService scoringService;
 
-    @Resource
-    private UserClient userClient;
 
     @Resource
     private ApplicationClient applicationClient;
+
+    @Resource
+    private ScoringStrategyExecutor scoringStrategyExecutor;
 
     @GetMapping("test/getAppById")
     public Application getAppByIdTest(@RequestParam Long id) {
@@ -155,4 +154,14 @@ public class ScoringController {
         }
         return ApiResponse.success(true);
     }
+
+    @PostMapping("/doScore")
+    public AnswerRecord doScore(@RequestBody DoScoreRequest doScoreRequest) throws Exception {
+        if (doScoreRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        return scoringStrategyExecutor.doScore(doScoreRequest.getAnswerList(), doScoreRequest.getApplication());
+
+    }
+
 }
