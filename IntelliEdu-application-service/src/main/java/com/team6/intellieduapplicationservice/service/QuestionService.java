@@ -6,6 +6,7 @@ import com.team6.intellieducommon.utils.IdRequest;
 import com.team6.intelliedumodel.dto.question.GetMyQuestionRequest;
 import com.team6.intelliedumodel.dto.question.GetPublicQuestionRequest;
 import com.team6.intelliedumodel.dto.question.ListQuestionRequest;
+import com.team6.intelliedumodel.entity.Application;
 import com.team6.intelliedumodel.entity.Question;
 import com.team6.intelliedumodel.vo.QuestionVo;
 
@@ -32,4 +33,6 @@ public interface QuestionService extends IService<Question> {
     Boolean updateQuestion(Question question);
 
     Boolean deleteQuestion(IdRequest idRequest);
+
+    Question getQuestionById(Long id);
 }

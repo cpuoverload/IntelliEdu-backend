@@ -38,6 +38,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @Resource
     private UserClient userClient;
 
+    @Resource
+    private QuestionMapper questionMapper;
+
     public void validate(Question question) {
         if (question == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
@@ -215,6 +218,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
         // 3. delete question
         return removeById(idRequest.getId());
+    }
+
+    @Override
+    public Question getQuestionById(Long id) {
+        if (id != null && id > 0) {
+            return questionMapper.selectById(id);
+        }
+
+        return null;
     }
 }
 
