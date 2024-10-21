@@ -129,6 +129,7 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
         QueryWrapper<Application> queryWrapper = new QueryWrapper<>();
         queryWrapper
                 .eq("user_id", userId)
+                .eq(listMyAppRequest.getId() != null, "id", listMyAppRequest.getId())
                 .orderBy(listMyAppRequest.getSortField() != null, listMyAppRequest.getIsAscend(), StrUtil.toUnderlineCase(listMyAppRequest.getSortField()));
         IPage<Application> applicationPage = page(page, queryWrapper);
 
