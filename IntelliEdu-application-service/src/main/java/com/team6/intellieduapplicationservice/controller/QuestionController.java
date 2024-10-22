@@ -1,6 +1,8 @@
 package com.team6.intellieduapplicationservice.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.team6.intellieduapplicationservice.ai.AiManager;
+import com.team6.intellieduapplicationservice.service.ApplicationService;
 import com.team6.intellieduapplicationservice.service.QuestionService;
 import com.team6.intellieducommon.utils.ApiResponse;
 import com.team6.intellieducommon.utils.BusinessException;
@@ -9,19 +11,37 @@ import com.team6.intellieducommon.utils.IdRequest;
 import com.team6.intelliedumodel.dto.question.*;
 import com.team6.intelliedumodel.entity.Application;
 import com.team6.intelliedumodel.entity.Question;
+import com.team6.intelliedumodel.enums.AppType;
 import com.team6.intelliedumodel.vo.QuestionVo;
+import dev.ai4j.openai4j.OpenAiClient;
+import dev.ai4j.openai4j.chat.ChatCompletionRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/question")
+@Slf4j
 public class QuestionController {
 
     @Resource
     private QuestionService questionService;
+
+    @Resource
+    private ApplicationService applicationService;
+
+    @Resource
+    OpenAiClient openAiClient;
+
+    @Resource
+    AiManager aiManager;
 
     // 获取一个应用的题目列表（不要分页）
     @PostMapping("/get/public")
@@ -128,7 +148,132 @@ public class QuestionController {
     }
 
     @GetMapping("/get/{id}")
-    ApiResponse<Question> getQuestionById(@PathVariable Long id){
+    ApiResponse<Question> getQuestionById(@PathVariable Long id) {
         return ApiResponse.success(questionService.getQuestionById(id));
     }
+
+
+    //region ai生成题目
+
+    private final static String GENERATE_QUESTION_SYSTEM_MESSAGE = "You are a meticulous question-generation expert. I will provide you with the following information:\n" +
+            "```\n" +
+            "Application name,\n" +
+            "【【【Application description】】】,\n" +
+            "Application category,\n" +
+            "Number of questions to generate,\n" +
+            "Number of options per question\n" +
+            "```\n" +
+            "\n" +
+            "Please follow the steps below to generate questions:\n" +
+            "1. Requirements: The questions and options should be as short as possible. The questions should not contain any numbers or indices, and the number of options for each question should match the value I provide. Ensure no questions are repeated.\n" +
+            "2. Strictly follow the JSON format below for the output of questions and options:\n" +
+            "```\n" +
+            "[{\"title\":\"Question title\", \"options\":[{\"value\":\"Option content\",\"key\":\"A\"},{\"value\":\"Option content\",\"key\":\"B\"}]}]\n" +
+            "```\n" +
+            "- The \"title\" is the question.\n" +
+            "- \"options\" are the answer choices.\n" +
+            "- Each option’s \"key\" should follow the alphabetical order (e.g., A, B, C, D).\n" +
+            "- The \"value\" is the content of the answer choice.\n" +
+            "3. Check if the questions contain any numbers. If so, remove the numbers.\n" +
+            "4. The format of the returned question list must be a JSON array.";
+
+    /**
+     * 生成题目的用户消息
+     *
+     * @param application
+     * @param questionNumber
+     * @param optionNumber
+     * @return
+     */
+    private String getGenerateQuestionUserMessage(Application application, int questionNumber, int optionNumber) {
+        StringBuilder userMessage = new StringBuilder();
+        userMessage.append(application.getAppName()).append("\n");
+        userMessage.append(application.getDescription()).append("\n");
+        userMessage.append(AppType.fromCode(application.getType()).getDescription() + "type").append("\n");
+        userMessage.append(questionNumber).append("\n");
+        userMessage.append(optionNumber);
+        return userMessage.toString();
+    }
+
+
+    @PostMapping("/ai_generate/sse")
+    public SseEmitter aiGenerateQuestionSse(@RequestBody AiGenerateQuestionRequest aiGenerateQuestionRequest) {
+        // 调用 AI 生成题目的请求是否为空
+        if (aiGenerateQuestionRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+
+        // 获取请求的参数
+        Long appId = aiGenerateQuestionRequest.getAppId();
+        int questionNumber = aiGenerateQuestionRequest.getQuestionNumber();
+        int optionNumber = aiGenerateQuestionRequest.getOptionNumber();
+
+        // 获取应用信息
+        Application application = applicationService.getById(appId);
+        if (application == null) {
+            throw new BusinessException(Err.NOT_FOUND_ERROR);
+        }
+
+
+        // 封装prompt
+        String userMessage = getGenerateQuestionUserMessage(application, questionNumber, optionNumber);
+        ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(GENERATE_QUESTION_SYSTEM_MESSAGE, userMessage, 0.5);
+
+        //建立 sse 连接对象，0表示永不超时
+        SseEmitter emitter = new SseEmitter(0L);
+
+        // 处理 AI 生成题目的请求
+        StringBuilder contentBuilder = new StringBuilder();
+        AtomicInteger flag = new AtomicInteger(0);
+        CompletableFuture<String> future = new CompletableFuture<>();
+
+        openAiClient.chatCompletion(chatCompletionRequest)
+                .onPartialResponse(response -> {
+                    String message = response.choices().get(0).delta().content();
+                    if (message != null) {
+                        message = message.replaceAll("\\s", "");
+                        for (char c : message.toCharArray()) {
+                            if (c == '{') {
+                                flag.incrementAndGet();
+                            }
+                            if (flag.get() > 0) {
+                                contentBuilder.append(c);
+                            }
+                            if (c == '}') {
+                                flag.decrementAndGet();
+                                if (flag.get() == 0) {
+                                    try {
+                                        emitter.send(contentBuilder.toString());
+                                        contentBuilder.setLength(0);
+                                    } catch (IOException e) {
+                                        log.error("Error sending partial JSON object", e);
+                                        emitter.completeWithError(e);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+                .onComplete(() -> {
+                    future.complete(contentBuilder.toString());
+                    emitter.complete();
+                })
+                .onError(throwable -> {
+                    log.error("Error during chat completion", throwable);
+                    future.completeExceptionally(throwable);
+                    emitter.completeWithError(throwable);
+                })
+                .execute();
+
+        future.whenComplete((response, throwable) -> {
+            if (throwable != null) {
+                log.error("Future completed with error", throwable);
+                emitter.completeWithError(throwable);
+            }
+        });
+
+        return emitter;
+    }
+    //endregion
 }
