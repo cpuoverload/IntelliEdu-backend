@@ -8,3 +8,9 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000  # milliseconds
+        readTimeout: 10000    # milliseconds
