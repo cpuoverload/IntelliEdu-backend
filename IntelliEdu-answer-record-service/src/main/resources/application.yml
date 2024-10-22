@@ -34,3 +34,9 @@ mybatis-plus:
       logic-not-delete-value: 0
 knife4j:
   enable: true
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000  # milliseconds
+        readTimeout: 10000    # milliseconds
