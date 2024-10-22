@@ -1,7 +1,9 @@
 package com.team6.intellieduapplicationservice.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.team6.intellieduapplicationservice.service.ApplicationService;
 import com.team6.intellieduapplicationservice.service.QuestionService;
+import com.team6.intellieducommon.ai.AiManager;
 import com.team6.intellieducommon.utils.ApiResponse;
 import com.team6.intellieducommon.utils.BusinessException;
 import com.team6.intellieducommon.utils.Err;
@@ -9,19 +11,34 @@ import com.team6.intellieducommon.utils.IdRequest;
 import com.team6.intelliedumodel.dto.question.*;
 import com.team6.intelliedumodel.entity.Application;
 import com.team6.intelliedumodel.entity.Question;
+import com.team6.intelliedumodel.enums.AppType;
 import com.team6.intelliedumodel.vo.QuestionVo;
+import dev.ai4j.openai4j.chat.ChatCompletionRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.CompletableFuture;
+
+import static com.team6.intellieducommon.constant.Constant.GENERATE_QUESTION_SYSTEM_MESSAGE;
 
 @RestController
 @RequestMapping("/question")
+@Slf4j
 public class QuestionController {
 
     @Resource
     private QuestionService questionService;
+
+    @Resource
+    private ApplicationService applicationService;
+
+
+    @Resource
+    AiManager aiManager;
 
     // 获取一个应用的题目列表（不要分页）
     @PostMapping("/get/public")
@@ -128,7 +145,65 @@ public class QuestionController {
     }
 
     @GetMapping("/get/{id}")
-    ApiResponse<Question> getQuestionById(@PathVariable Long id){
+    ApiResponse<Question> getQuestionById(@PathVariable Long id) {
         return ApiResponse.success(questionService.getQuestionById(id));
     }
+
+
+    //region ai生成题目
+
+
+    /**
+     * 生成题目的用户消息
+     *
+     * @param application
+     * @param questionNumber
+     * @param optionNumber
+     * @return
+     */
+    private String getGenerateQuestionUserMessage(Application application, int questionNumber, int optionNumber) {
+        StringBuilder userMessage = new StringBuilder();
+        userMessage.append(application.getAppName()).append("\n");
+        userMessage.append(application.getDescription()).append("\n");
+        userMessage.append(AppType.fromCode(application.getType()).getDescription() + "type").append("\n");
+        userMessage.append(questionNumber).append("\n");
+        userMessage.append(optionNumber);
+        return userMessage.toString();
+    }
+
+
+    @PostMapping("/ai_generate/sse")
+    public SseEmitter aiGenerateQuestionSse(@RequestBody AiGenerateQuestionRequest aiGenerateQuestionRequest) {
+        // 调用 AI 生成题目的请求是否为空
+        if (aiGenerateQuestionRequest == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+
+        // 获取请求的参数
+        Long appId = aiGenerateQuestionRequest.getAppId();
+        int questionNumber = aiGenerateQuestionRequest.getQuestionNumber();
+        int optionNumber = aiGenerateQuestionRequest.getOptionNumber();
+
+        // 获取应用信息
+        Application application = applicationService.getById(appId);
+        if (application == null) {
+            throw new BusinessException(Err.NOT_FOUND_ERROR);
+        }
+
+
+        // 封装prompt
+        String userMessage = getGenerateQuestionUserMessage(application, questionNumber, optionNumber);
+        ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(GENERATE_QUESTION_SYSTEM_MESSAGE, userMessage, 0.5);
+
+        //建立 sse 连接对象，0表示永不超时
+        SseEmitter emitter = new SseEmitter(0L);
+
+        // 处理 AI 生成题目的请求
+        CompletableFuture<String> future = new CompletableFuture<>();
+
+        aiManager.executeChatCompletion(chatCompletionRequest, emitter, future);
+
+        return emitter;
+    }
+    //endregion
 }

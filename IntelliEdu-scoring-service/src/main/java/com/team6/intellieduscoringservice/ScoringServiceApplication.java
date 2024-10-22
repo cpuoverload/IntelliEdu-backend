@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication()
+@SpringBootApplication(scanBasePackages = {"com.team6.intellieduscoringservice", "com.team6.intellieducommon"})
 @MapperScan("com.team6.intellieduscoringservice.mapper")
 @EnableFeignClients(basePackages = "com.team6.intellieduapi.client")
 @EnableDiscoveryClient
