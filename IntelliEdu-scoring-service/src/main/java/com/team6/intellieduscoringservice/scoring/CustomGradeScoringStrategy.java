@@ -43,21 +43,6 @@ public class CustomGradeScoringStrategy implements ScoringStrategy {
         QuestionVo questionVo = QuestionVo.objToVo(question);
         List<QuestionContent> questionContent = questionVo.getQuestions();
 
-//        // 遍历题目列表
-//        for (QuestionContent questionContentDTO : questionContent) {
-//            // 遍历答案列表
-//            for (String answer : answerList) {
-//                // 遍历题目中的选项
-//                for (QuestionContent.Option option : questionContentDTO.getOptions()) {
-//                    // 如果答案和选项的key匹配
-//                    if (option.getKey().equals(answer)) {
-//                        int score = Optional.of(option.getGrade()).orElse(0);
-//                        totalScore += score;
-//                    }
-//                }
-//            }
-//        }
-
         for (int i = 0; i < questionContent.size(); i++) {
             QuestionContent questionContentDTO = questionContent.get(i);
             String answer = answerList.get(i);  // 从 answerList 中拿到对应题目的答案
