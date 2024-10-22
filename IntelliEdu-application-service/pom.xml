@@ -90,12 +90,6 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
         </dependency>
-        <dependency>
-            <groupId>dev.ai4j</groupId>
-            <artifactId>openai4j</artifactId>
-            <version>0.17.0</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>

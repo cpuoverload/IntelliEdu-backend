@@ -38,9 +38,3 @@ logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.web.servlet: DEBUG
-
-# openai
-openai:
-  token: ${OPENAI_TOKEN}
-  org-id: ${OPENAI_ORG_ID}
-  timeout: 60000

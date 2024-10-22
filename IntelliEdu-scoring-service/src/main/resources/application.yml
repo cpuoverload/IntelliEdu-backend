@@ -34,9 +34,3 @@ mybatis-plus:
       logic-not-delete-value: 0
 knife4j:
   enable: true
-
-# openai
-openai:
-  token: ${OPENAI_TOKEN}
-  org-id: ${OPENAI_ORG_ID}
-  timeout: 60000
