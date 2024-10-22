@@ -29,5 +29,10 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>dev.ai4j</groupId>
+            <artifactId>openai4j</artifactId>
+            <version>0.17.0</version>
+        </dependency>
     </dependencies>
 </project>
