@@ -164,26 +164,21 @@ public class QuestionController {
      */
     private String getGenerateQuestionUserMessage(Application application, int questionNumber, int optionNumber) {
         StringBuilder userMessage = new StringBuilder();
-        userMessage.append(application.getAppName()).append("\n");
-        userMessage.append(application.getDescription()).append("\n");
-        userMessage.append(AppType.fromCode(application.getType()).getDescription() + "type").append("\n");
-        userMessage.append(questionNumber).append("\n");
-        userMessage.append(optionNumber);
+        userMessage.append("Application name: ").append(application.getAppName()).append("\n");
+        userMessage.append("Application description: ").append(application.getDescription()).append("\n");
+        userMessage.append("Application category: ").append(AppType.fromCode(application.getType()).getDescription() + " type").append("\n");
+        userMessage.append("Number of questions to generate: ").append(questionNumber);
+        userMessage.append("Number of options per question: ").append(optionNumber);
         return userMessage.toString();
     }
 
 
     @GetMapping("/ai_generate/sse")
-    public SseEmitter aiGenerateQuestionSse(AiGenerateQuestionRequest aiGenerateQuestionRequest) {
+    public SseEmitter aiGenerateQuestionSse(Long appId, int questionNumber, int optionNumber) {
         // 调用 AI 生成题目的请求是否为空
-        if (aiGenerateQuestionRequest == null) {
+        if (appId == null || questionNumber <= 0 || optionNumber <= 0) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
-
-        // 获取请求的参数
-        Long appId = aiGenerateQuestionRequest.getAppId();
-        int questionNumber = aiGenerateQuestionRequest.getQuestionNumber();
-        int optionNumber = aiGenerateQuestionRequest.getOptionNumber();
 
         // 获取应用信息
         Application application = applicationService.getById(appId);
@@ -204,7 +199,7 @@ public class QuestionController {
             systemMessage = GENERATE_GRADE_QUESTION_SYSTEM_MESSAGE;
         }
 
-        ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(systemMessage, userMessage, 0.5);
+        ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(systemMessage, userMessage, 1);
         //建立 sse 连接对象，0表示永不超时
         SseEmitter emitter = new SseEmitter(0L);
 
