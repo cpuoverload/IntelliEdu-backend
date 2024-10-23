@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.team6.intellieducommon.constant.Constant.MAX_TOKEN_LENGTH;
+
 
 @Component
 @Slf4j
@@ -31,8 +33,8 @@ public class AiManager {
      */
     public String doRequest(List<Message> messageList, double temperature) {
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
-                .model("gpt-4o-mini")
-                .maxTokens(15000)
+                .model("gpt-4o")
+                .maxTokens(MAX_TOKEN_LENGTH)
                 .temperature(temperature)
                 .messages(messageList)
                 .build();
@@ -60,9 +62,9 @@ public class AiManager {
      */
     public ChatCompletionRequest generalStreamRequest(double temperature, List<Message> messages) {
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
-                .model("gpt-4o-mini")
+                .model("gpt-4o")
                 .stream(true)
-                .maxTokens(15000)
+                .maxTokens(MAX_TOKEN_LENGTH)
                 .temperature(temperature)
                 .messages(messages)
                 .build();

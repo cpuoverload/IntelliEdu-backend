@@ -10,6 +10,9 @@ package com.team6.intellieducommon.constant;
  * @Version 1.0
  */
 public class Constant {
+
+    public static final int MAX_TOKEN_LENGTH = 4095;
+
     public static final String GENERATE_EVALUATION_QUESTION_SYSTEM_MESSAGE = "You are a meticulous question-generation expert. I will provide you with the following information:\n" +
             "```\n" +
             "Application name,\n" +
@@ -46,7 +49,7 @@ public class Constant {
             "1. Requirement: The questions and options should be as short as possible, questions should not include numbers or indexes, the number of options per question should follow the number I provide, and the questions must not repeat.\n" +
             "2. Output the questions and options strictly in the following JSON format:\n" +
             "```\n" +
-            "[{\"options\":[{\"value\":\"Option content\",\"key\":\"A\", \"grade\": 0},{\"value\":\"\",\"key\":\"B\", \"grade\": 2}],\"title\":\"Question title\"}]\n" +
+            "[{\"options\":[{\"value\":\"Option content\",\"key\":\"A\", \"grade\": 0},{\"value\":\"\",\"key\":\"B\", \"grade\": 1}],\"title\":\"Question title\"}]\n" +
             "```\n" +
             "The \"title\" is the question, and the \"options\" are the possible answers. Each option's \"key\" should follow the alphabetical order (e.g., A, B, C, D, etc.). The \"value\" is the content of the option, and the \"grade\" represents the score of that option. Each question must have only one correct option, with a grade of 1 for the correct option and 0 for the other options.\n" +
             "3. Ensure that the questions do not include numbers; if they do, remove them.\n" +
