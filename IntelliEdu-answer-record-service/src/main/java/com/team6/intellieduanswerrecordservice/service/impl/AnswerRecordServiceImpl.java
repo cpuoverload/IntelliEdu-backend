@@ -136,6 +136,23 @@ public class AnswerRecordServiceImpl extends ServiceImpl<AnswerRecordMapper, Ans
         return answerRecordVoPage;
     }
 
+    @Override
+    public AnswerRecordVo getAnswerRecord(Long id) {
+        // 1. validation
+        if (id == null || id <= 0) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+
+        // 2. get answerRecord
+        AnswerRecord answerRecord = getById(id);
+        if (answerRecord == null) {
+            throw new BusinessException(Err.NOT_FOUND_ERROR);
+        }
+
+        // 3. convert entity to vo
+        return entityToVo(answerRecord);
+    }
+
     public AnswerRecordVo entityToVo(AnswerRecord answerRecord) {
         AnswerRecordVo answerRecordVo = new AnswerRecordVo();
         BeanUtils.copyProperties(answerRecord, answerRecordVo);

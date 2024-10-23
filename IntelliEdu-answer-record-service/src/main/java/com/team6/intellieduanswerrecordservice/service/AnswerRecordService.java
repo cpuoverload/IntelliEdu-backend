@@ -20,11 +20,9 @@ public interface AnswerRecordService extends IService<AnswerRecord> {
 
     Page<AnswerRecordVo> listMyAnswerRecord(ListMyAnswerRequest listMyAnswerRequest, HttpServletRequest request);
 
+    AnswerRecordVo getAnswerRecord(Long id);
+
     Page<AnswerRecordVo> listAnswerRecord(ListAnswerRequest listAnswerRequest);
 
     Boolean deleteAnswerRecord(IdRequest idRequest);
-
-
-
-
 }
