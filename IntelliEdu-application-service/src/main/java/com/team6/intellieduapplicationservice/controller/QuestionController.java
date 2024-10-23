@@ -174,9 +174,9 @@ public class QuestionController {
 
 
     @GetMapping("/ai_generate/sse")
-    public SseEmitter aiGenerateQuestionSse(Long appId, int questionNumber, int optionNumber) {
+    public SseEmitter aiGenerateQuestionSse(Long appId, Integer questionNumber, Integer optionNumber) {
         // 调用 AI 生成题目的请求是否为空
-        if (appId == null || questionNumber <= 0 || optionNumber <= 0) {
+        if (appId == null || questionNumber == null || optionNumber == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
 
