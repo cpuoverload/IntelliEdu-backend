@@ -77,7 +77,7 @@ public class AnswerRecordServiceImpl extends ServiceImpl<AnswerRecordMapper, Ans
     }
 
     @Override
-    public Boolean addMyAnswerRecord(AnswerRecord answerRecord, HttpServletRequest request) {
+    public Long addMyAnswerRecord(AnswerRecord answerRecord, HttpServletRequest request) {
         // 1. validation
         validate(answerRecord);
 
@@ -107,7 +107,7 @@ public class AnswerRecordServiceImpl extends ServiceImpl<AnswerRecordMapper, Ans
             throw new BusinessException(Err.SYSTEM_ERROR, "do score failed");
         }
 
-        return true;
+        return answerRecordId;
     }
 
     @Override

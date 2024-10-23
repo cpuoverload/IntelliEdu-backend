@@ -30,7 +30,7 @@ public class AnswerRecordController {
 
     // 普通用户添加答题记录
     @PostMapping("/add/me")
-    public ApiResponse<Boolean> addMyAnswerRecord(@RequestBody AddMyAnswerRequest addMyAnswerRequest, HttpServletRequest request) {
+    public ApiResponse<Long> addMyAnswerRecord(@RequestBody AddMyAnswerRequest addMyAnswerRequest, HttpServletRequest request) {
         if (addMyAnswerRequest == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
@@ -39,11 +39,8 @@ public class AnswerRecordController {
         }
         AnswerRecord answerRecord = new AnswerRecord();
         BeanUtils.copyProperties(addMyAnswerRequest, answerRecord);
-        Boolean success = answerRecordService.addMyAnswerRecord(answerRecord, request);
-        if (!success) {
-            throw new BusinessException(Err.SYSTEM_ERROR);
-        }
-        return ApiResponse.success(true);
+        Long id = answerRecordService.addMyAnswerRecord(answerRecord, request);
+        return ApiResponse.success(id);
     }
 
     // 普通用户查看答题记录
