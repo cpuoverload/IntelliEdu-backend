@@ -12,10 +12,7 @@ import com.team6.intelliedumodel.dto.answerrecord.ListMyAnswerRequest;
 import com.team6.intelliedumodel.entity.AnswerRecord;
 import com.team6.intelliedumodel.vo.AnswerRecordVo;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +48,15 @@ public class AnswerRecordController {
         }
         Page<AnswerRecordVo> answerRecordVoPage = answerRecordService.listMyAnswerRecord(listMyAnswerRequest, request);
         return ApiResponse.success(answerRecordVoPage);
+    }
+
+    @GetMapping("/get/{id}")
+    public ApiResponse<AnswerRecordVo> getAnswerRecordById(@PathVariable Long id) {
+        if (id == null) {
+            throw new BusinessException(Err.PARAMS_ERROR);
+        }
+        AnswerRecordVo answerRecordVo = answerRecordService.getAnswerRecord(id);
+        return ApiResponse.success(answerRecordVo);
     }
 
     // 管理员查看答题记录
