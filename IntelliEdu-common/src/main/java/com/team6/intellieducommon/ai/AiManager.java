@@ -32,7 +32,7 @@ public class AiManager {
     public String doRequest(List<Message> messageList, double temperature) {
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
                 .model("gpt-4o-mini")
-                .maxTokens(100000)
+                .maxTokens(15000)
                 .temperature(temperature)
                 .messages(messageList)
                 .build();
@@ -62,7 +62,7 @@ public class AiManager {
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
                 .model("gpt-4o-mini")
                 .stream(true)
-                .maxTokens(100000)
+                .maxTokens(15000)
                 .temperature(temperature)
                 .messages(messages)
                 .build();
