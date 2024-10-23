@@ -23,7 +23,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 
-import static com.team6.intellieducommon.constant.Constant.GENERATE_QUESTION_SYSTEM_MESSAGE;
+import static com.team6.intellieducommon.constant.Constant.GENERATE_EVALUATION_QUESTION_SYSTEM_MESSAGE;
+import static com.team6.intellieducommon.constant.Constant.GENERATE_GRADE_QUESTION_SYSTEM_MESSAGE;
 
 @RestController
 @RequestMapping("/question")
@@ -190,20 +191,40 @@ public class QuestionController {
             throw new BusinessException(Err.NOT_FOUND_ERROR);
         }
 
-
         // 封装prompt
         String userMessage = getGenerateQuestionUserMessage(application, questionNumber, optionNumber);
-        ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(GENERATE_QUESTION_SYSTEM_MESSAGE, userMessage, 0.5);
 
-        //建立 sse 连接对象，0表示永不超时
-        SseEmitter emitter = new SseEmitter(0L);
 
-        // 处理 AI 生成题目的请求
-        CompletableFuture<String> future = new CompletableFuture<>();
+        //测评类应用
+        if (application.getType() == AppType.EVALUATION.getCode()) {
+            ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(GENERATE_EVALUATION_QUESTION_SYSTEM_MESSAGE, userMessage, 0.5);
+            //建立 sse 连接对象，0表示永不超时
+            SseEmitter emitter = new SseEmitter(0L);
 
-        aiManager.executeChatCompletion(chatCompletionRequest, emitter, future);
+            // 处理 AI 生成题目的请求
+            CompletableFuture<String> future = new CompletableFuture<>();
 
-        return emitter;
+            aiManager.executeChatCompletion(chatCompletionRequest, emitter, future);
+
+            return emitter;
+        }
+
+        //得分类应用
+        if (application.getType() == AppType.GRADE.getCode()) {
+            ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(GENERATE_GRADE_QUESTION_SYSTEM_MESSAGE, userMessage, 0.5);
+            //建立 sse 连接对象，0表示永不超时
+            SseEmitter emitter = new SseEmitter(0L);
+
+            // 处理 AI 生成题目的请求
+            CompletableFuture<String> future = new CompletableFuture<>();
+
+            aiManager.executeChatCompletion(chatCompletionRequest, emitter, future);
+
+            return emitter;
+
+        }
+
+        return null;
     }
     //endregion
 }
