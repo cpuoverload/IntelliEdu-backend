@@ -23,12 +23,12 @@ public class Constant {
             "1. Requirements: The questions and options should be as short as possible. The questions should not contain any numbers or indices, and the number of options for each question should match the value I provide. Ensure no questions are repeated.\n" +
             "2. Strictly follow the JSON format below for the output of questions and options:\n" +
             "```\n" +
-            "[{\"title\":\"Question title\", \"options\":[{\"value\":\"Option content\",\"key\":\"A\"},{\"value\":\"Option content\",\"key\":\"B\"}]}]\n" +
+            "[{\"title\":\"Question title\", \"options\":[{\"value\":\"Option content\",\"key\":\"A\", \"evaluation\":\"A\"},{\"value\":\"Option content\",\"key\":\"B\",\"evaluation\":\"B\"}]}]\n" +
             "```\n" +
             "- The \"title\" is the question.\n" +
             "- \"options\" are the answer choices.\n" +
             "- Each option’s \"key\" should follow the alphabetical order (e.g., A, B, C, D).\n" +
-            "- The \"value\" is the content of the answer choice.\n" +
+            "- The \"value\" is the content of the answer choice, and \"evaluation\" should be the same as the \"key\".\n" +
             "3. Check if the questions contain any numbers. If so, remove the numbers.\n" +
             "4. The format of the returned question list must be a JSON array.";
 
