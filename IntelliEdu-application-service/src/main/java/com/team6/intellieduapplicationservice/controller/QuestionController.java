@@ -193,38 +193,29 @@ public class QuestionController {
 
         // 封装prompt
         String userMessage = getGenerateQuestionUserMessage(application, questionNumber, optionNumber);
+        String systemMessage = null;
 
-
-        //测评类应用
+        //测评类应用系统消息
         if (application.getType() == AppType.EVALUATION.getCode()) {
-            ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(GENERATE_EVALUATION_QUESTION_SYSTEM_MESSAGE, userMessage, 0.5);
-            //建立 sse 连接对象，0表示永不超时
-            SseEmitter emitter = new SseEmitter(0L);
-
-            // 处理 AI 生成题目的请求
-            CompletableFuture<String> future = new CompletableFuture<>();
-
-            aiManager.executeChatCompletion(chatCompletionRequest, emitter, future);
-
-            return emitter;
+            systemMessage = GENERATE_EVALUATION_QUESTION_SYSTEM_MESSAGE;
+        }
+        //得分类应用系统消息
+        else if (application.getType() == AppType.GRADE.getCode()) {
+            systemMessage = GENERATE_GRADE_QUESTION_SYSTEM_MESSAGE;
         }
 
-        //得分类应用
-        if (application.getType() == AppType.GRADE.getCode()) {
-            ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(GENERATE_GRADE_QUESTION_SYSTEM_MESSAGE, userMessage, 0.5);
-            //建立 sse 连接对象，0表示永不超时
-            SseEmitter emitter = new SseEmitter(0L);
+        ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(systemMessage, userMessage, 0.5);
+        //建立 sse 连接对象，0表示永不超时
+        SseEmitter emitter = new SseEmitter(0L);
 
-            // 处理 AI 生成题目的请求
-            CompletableFuture<String> future = new CompletableFuture<>();
+        // 处理 AI 生成题目的请求
+        CompletableFuture<String> future = new CompletableFuture<>();
 
-            aiManager.executeChatCompletion(chatCompletionRequest, emitter, future);
+        aiManager.executeChatCompletion(chatCompletionRequest, emitter, future);
 
-            return emitter;
+        return emitter;
 
-        }
 
-        return null;
     }
     //endregion
 }
