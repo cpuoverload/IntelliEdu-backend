@@ -23,7 +23,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 
-import static com.team6.intellieducommon.constant.Constant.GENERATE_QUESTION_SYSTEM_MESSAGE;
+import static com.team6.intellieducommon.constant.Constant.GENERATE_EVALUATION_QUESTION_SYSTEM_MESSAGE;
+import static com.team6.intellieducommon.constant.Constant.GENERATE_GRADE_QUESTION_SYSTEM_MESSAGE;
 
 @RestController
 @RequestMapping("/question")
@@ -163,26 +164,21 @@ public class QuestionController {
      */
     private String getGenerateQuestionUserMessage(Application application, int questionNumber, int optionNumber) {
         StringBuilder userMessage = new StringBuilder();
-        userMessage.append(application.getAppName()).append("\n");
-        userMessage.append(application.getDescription()).append("\n");
-        userMessage.append(AppType.fromCode(application.getType()).getDescription() + "type").append("\n");
-        userMessage.append(questionNumber).append("\n");
-        userMessage.append(optionNumber);
+        userMessage.append("Application name: ").append(application.getAppName()).append("\n");
+        userMessage.append("Application description: ").append(application.getDescription()).append("\n");
+        userMessage.append("Application category: ").append(AppType.fromCode(application.getType()).getDescription() + " type").append("\n");
+        userMessage.append("Number of questions to generate: ").append(questionNumber);
+        userMessage.append("Number of options per question: ").append(optionNumber);
         return userMessage.toString();
     }
 
 
     @GetMapping("/ai_generate/sse")
-    public SseEmitter aiGenerateQuestionSse(AiGenerateQuestionRequest aiGenerateQuestionRequest) {
+    public SseEmitter aiGenerateQuestionSse(Long appId, Integer questionNumber, Integer optionNumber) {
         // 调用 AI 生成题目的请求是否为空
-        if (aiGenerateQuestionRequest == null) {
+        if (appId == null || questionNumber == null || optionNumber == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
         }
-
-        // 获取请求的参数
-        Long appId = aiGenerateQuestionRequest.getAppId();
-        int questionNumber = aiGenerateQuestionRequest.getQuestionNumber();
-        int optionNumber = aiGenerateQuestionRequest.getOptionNumber();
 
         // 获取应用信息
         Application application = applicationService.getById(appId);
@@ -190,11 +186,20 @@ public class QuestionController {
             throw new BusinessException(Err.NOT_FOUND_ERROR);
         }
 
-
         // 封装prompt
         String userMessage = getGenerateQuestionUserMessage(application, questionNumber, optionNumber);
-        ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(GENERATE_QUESTION_SYSTEM_MESSAGE, userMessage, 0.5);
+        String systemMessage = null;
 
+        //测评类应用系统消息
+        if (application.getType() == AppType.EVALUATION.getCode()) {
+            systemMessage = GENERATE_EVALUATION_QUESTION_SYSTEM_MESSAGE;
+        }
+        //得分类应用系统消息
+        else if (application.getType() == AppType.GRADE.getCode()) {
+            systemMessage = GENERATE_GRADE_QUESTION_SYSTEM_MESSAGE;
+        }
+
+        ChatCompletionRequest chatCompletionRequest = aiManager.generalStreamRequest(systemMessage, userMessage, 1);
         //建立 sse 连接对象，0表示永不超时
         SseEmitter emitter = new SseEmitter(0L);
 
@@ -204,6 +209,8 @@ public class QuestionController {
         aiManager.executeChatCompletion(chatCompletionRequest, emitter, future);
 
         return emitter;
+
+
     }
     //endregion
 }

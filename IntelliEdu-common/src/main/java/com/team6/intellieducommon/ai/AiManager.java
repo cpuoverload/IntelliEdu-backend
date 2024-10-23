@@ -32,6 +32,7 @@ public class AiManager {
     public String doRequest(List<Message> messageList, double temperature) {
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
                 .model("gpt-4o-mini")
+                .maxTokens(100000)
                 .temperature(temperature)
                 .messages(messageList)
                 .build();
@@ -61,6 +62,7 @@ public class AiManager {
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
                 .model("gpt-4o-mini")
                 .stream(true)
+                .maxTokens(100000)
                 .temperature(temperature)
                 .messages(messages)
                 .build();
@@ -94,7 +96,7 @@ public class AiManager {
                 .onPartialResponse(response -> {
                     String message = response.choices().get(0).delta().content();
                     if (message != null) {
-                        message = message.replaceAll("\\s", "");
+//                        message = message.replaceAll("\\s", "");
                         for (char c : message.toCharArray()) {
                             if (c == '{') {
                                 flag.incrementAndGet();

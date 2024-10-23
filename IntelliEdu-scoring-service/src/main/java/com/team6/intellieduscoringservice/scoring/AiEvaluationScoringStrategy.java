@@ -31,8 +31,8 @@ public class AiEvaluationScoringStrategy implements ScoringStrategy {
 
     private String getAiEvaluationScoringUserMessage(Application application, List<QuestionContent> questionContentList, List<String> answerList) {
         StringBuilder userMessage = new StringBuilder();
-        userMessage.append(application.getAppName()).append("\n");
-        userMessage.append(application.getDescription()).append("\n");
+        userMessage.append("Application name: ").append(application.getAppName()).append("\n");
+        userMessage.append("Application description: ").append(application.getDescription()).append("\n");
         List<AiDoScoreRequest> aiDoScoreRequestList = new ArrayList<>();
         for (int i = 0; i < questionContentList.size(); i++) {
             AiDoScoreRequest aiDoScoreRequest = new AiDoScoreRequest();
@@ -40,7 +40,7 @@ public class AiEvaluationScoringStrategy implements ScoringStrategy {
             aiDoScoreRequest.setUserAnswer(answerList.get(i));
             aiDoScoreRequestList.add(aiDoScoreRequest);
         }
-        userMessage.append(JSONUtil.toJsonStr(aiDoScoreRequestList));
+        userMessage.append("List of questions and user answers: ").append(JSONUtil.toJsonStr(aiDoScoreRequestList));
         return userMessage.toString();
     }
 
@@ -56,7 +56,7 @@ public class AiEvaluationScoringStrategy implements ScoringStrategy {
         // 封装 Prompt
         String userMessage = getAiEvaluationScoringUserMessage(application, questionContent, answerList);
         // AI 生成
-        String result = aiManager.doRequest(AI_EVALUATION_SCORING_SYSTEM_MESSAGE, userMessage, 0.5);
+        String result = aiManager.doRequest(AI_EVALUATION_SCORING_SYSTEM_MESSAGE, userMessage, 1);
         // 结果处理
         int start = result.indexOf("{");
         int end = result.lastIndexOf("}");
