@@ -172,8 +172,8 @@ public class QuestionController {
     }
 
 
-    @PostMapping("/ai_generate/sse")
-    public SseEmitter aiGenerateQuestionSse(@RequestBody AiGenerateQuestionRequest aiGenerateQuestionRequest) {
+    @GetMapping("/ai_generate/sse")
+    public SseEmitter aiGenerateQuestionSse(AiGenerateQuestionRequest aiGenerateQuestionRequest) {
         // 调用 AI 生成题目的请求是否为空
         if (aiGenerateQuestionRequest == null) {
             throw new BusinessException(Err.PARAMS_ERROR);
