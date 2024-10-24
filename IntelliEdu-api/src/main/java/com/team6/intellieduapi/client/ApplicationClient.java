@@ -5,7 +5,6 @@ import com.team6.intelliedumodel.entity.Question;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import com.team6.intelliedumodel.entity.Application;
 
 
@@ -16,7 +15,7 @@ public interface ApplicationClient {
     ApiResponse<Application> getApplicationById(@PathVariable("id") Long id);
 
     @GetMapping("question/get/{id}")
-    ApiResponse<Question> getQuestionById(@PathVariable("id") Long id);
+    ApiResponse<Question> getQuestionByAppId(@PathVariable("id") Long id);
 
 
 

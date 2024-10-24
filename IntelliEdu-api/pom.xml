@@ -44,7 +44,6 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
-
     </dependencies>
 
     <properties>
