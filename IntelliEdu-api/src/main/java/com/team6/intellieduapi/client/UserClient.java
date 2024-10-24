@@ -18,8 +18,4 @@ public interface UserClient {
         return userVo.getId();
     }
 
-    default ApiResponse<UserVo> getMyInfo(HttpServletRequest request) {
-        UserVo userVo = (UserVo) request.getSession().getAttribute("loginUser");
-        return ApiResponse.success(userVo);
-    }
 }
