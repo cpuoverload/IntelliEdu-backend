@@ -56,6 +56,7 @@
         </dependency>
 
         <!-- Knife4J Gateway -->
+<!--        4.3.0跑不通，4.5.0可以-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-gateway-spring-boot-starter</artifactId>
