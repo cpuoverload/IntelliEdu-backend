@@ -145,9 +145,9 @@ public class QuestionController {
         return ApiResponse.success(true);
     }
 
-    @GetMapping("/get/{id}")
-    ApiResponse<Question> getQuestionById(@PathVariable Long id) {
-        return ApiResponse.success(questionService.getQuestionById(id));
+    @GetMapping("/get/{appId}")
+    ApiResponse<Question> getQuestionByAppId(@PathVariable Long appId) {
+        return ApiResponse.success(questionService.getQuestionByAppId(appId));
     }
 
 
