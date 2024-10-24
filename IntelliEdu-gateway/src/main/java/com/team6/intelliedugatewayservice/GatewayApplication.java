@@ -1,4 +1,4 @@
-package com.team6.intellieduapplicationservice;
+package com.team6.intelliedugatewayservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
