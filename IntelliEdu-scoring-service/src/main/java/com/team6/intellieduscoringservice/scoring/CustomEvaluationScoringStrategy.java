@@ -30,8 +30,8 @@ public class CustomEvaluationScoringStrategy implements ScoringStrategy {
     @Override
     public AnswerRecord doScore(List<String> answerList, Application application) throws Exception {
         Long appId = application.getId();
-        // 1. 根据 id 查询到题目和题目结果信息
-        Question question = applicationClient.getQuestionById(appId).getData();
+        // 1. 根据 appId 查询到题目和题目结果信息
+        Question question = applicationClient.getQuestionByAppId(appId).getData();
         List<Scoring> scoringList = scoringService.list(
                 Wrappers.lambdaQuery(Scoring.class)
                         .eq(Scoring::getAppId, appId)

@@ -49,7 +49,7 @@ public class AiEvaluationScoringStrategy implements ScoringStrategy {
     public AnswerRecord doScore(List<String> answerList, Application application) throws Exception {
         Long appId = application.getId();
         // 1. 根据 appId 查询到对应题目
-        Question question = applicationClient.getQuestionById(appId).getData();
+        Question question = applicationClient.getQuestionByAppId(appId).getData();
         QuestionVo questionVo = QuestionVo.objToVo(question);
         List<QuestionContent> questionContent = questionVo.getQuestions();
         // 2. 调用 AI 获取结果

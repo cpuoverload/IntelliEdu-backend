@@ -30,7 +30,7 @@ public class CustomGradeScoringStrategy implements ScoringStrategy {
     public AnswerRecord doScore(List<String> answerList, Application application) throws Exception {
         Long appId = application.getId();
         // 1. 根据 id 查询到题目和题目结果信息（按分数降序排序）
-        Question question = applicationClient.getQuestionById(appId).getData();
+        Question question = applicationClient.getQuestionByAppId(appId).getData();
 
         List<Scoring> scoringList = scoringService.list(
                 Wrappers.lambdaQuery(Scoring.class)
