@@ -27,13 +27,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
-* @author passion
-* @description 针对表【question(Question)】的数据库操作Service实现
-* @createDate 2024-10-17 15:51:37
-*/
+ * @author passion
+ * @description 针对表【question(Question)】的数据库操作Service实现
+ * @createDate 2024-10-17 15:51:37
+ */
 @Service
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
-    implements QuestionService {
+        implements QuestionService {
 
     @Resource
     private UserClient userClient;
@@ -230,9 +230,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     }
 
     @Override
-    public Question getQuestionById(Long id) {
-        if (id != null && id > 0) {
-            return questionMapper.selectById(id);
+    public Question getQuestionByAppId(Long appId) {
+        if (appId != null && appId > 0) {
+            QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("app_id", appId);
+            return questionMapper.selectOne(queryWrapper);
         }
 
         return null;

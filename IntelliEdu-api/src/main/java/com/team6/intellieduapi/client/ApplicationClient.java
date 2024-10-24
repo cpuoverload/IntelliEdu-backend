@@ -14,8 +14,8 @@ public interface ApplicationClient {
     @GetMapping("/get/{id}")
     ApiResponse<Application> getApplicationById(@PathVariable("id") Long id);
 
-    @GetMapping("question/get/{id}")
-    ApiResponse<Question> getQuestionByAppId(@PathVariable("id") Long id);
+    @GetMapping("question/get/{appId}")
+    ApiResponse<Question> getQuestionByAppId(@PathVariable("appId") Long appId);
 
 
 
