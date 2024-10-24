@@ -1,16 +1,32 @@
 server:
-  port: 8085
+  port: 8101
 spring:
   application:
     name: IntelliEdu-gateway
   main:
     web-application-type: reactive
   cloud:
-#    gateway:
-#      routes:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        - id: IntelliEdu-user-service
+          uri: lb://IntelliEdu-user-service
+          predicates:
+            - Path=/api/user/**
+        - id: IntelliEdu-application-service
+          uri: lb://IntelliEdu-application-service
+          predicates:
+            - Path=/api/application/**
+        - id: IntelliEdu-scoring-service
+          uri: lb://IntelliEdu-scoring-service
+          predicates:
+            - Path=/api/scoring/**
+        - id: IntelliEdu-answer-record-service
+          uri: lb://IntelliEdu-answer-record-service
+          predicates:
+            - Path=/api/answer-record/**
 knife4j:
   gateway:
     enabled: true
