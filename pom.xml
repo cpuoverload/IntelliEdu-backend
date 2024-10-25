@@ -27,7 +27,8 @@
         <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
         <mybatis-plus.version>3.5.4</mybatis-plus.version>
         <mysql.version>8.0.23</mysql.version>
-        <knife4j.version>4.3.0</knife4j.version>
+        <!-- knife4j 4.3.0有 bug，统一成 4.5.0就好了 -->
+        <knife4j.version>4.5.0</knife4j.version>
         <hutool.version>5.8.12</hutool.version>
     </properties>
     <dependencies>
