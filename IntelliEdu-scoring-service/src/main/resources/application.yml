@@ -10,7 +10,7 @@ spring:
     timeout: 2592000 # 30 days expiration
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/intelli_edu_scoring
+    url: jdbc:mysql://intelliedu-scoring.c5mweuciu680.ap-southeast-1.rds.amazonaws.com:3307/intelli_edu_scoring
     username: root
     password: ${MYSQL_PASSWORD}
   redis:
