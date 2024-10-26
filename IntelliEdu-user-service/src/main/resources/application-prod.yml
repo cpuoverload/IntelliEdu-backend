@@ -44,10 +44,6 @@ mybatis-plus:
       logic-not-delete-value: 0
 knife4j:
   enable: true
-logging:
-  level:
-    org.springframework.web: DEBUG
-    org.springframework.web.servlet: DEBUG
 feign:
   client:
     config:

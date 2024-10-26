@@ -15,7 +15,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${INTELLIEDU_APPLICATION_MYSQL_HOST}
-    username: ${INTELLIEDU_ANSWER_RECORD_MYSQL_USERNAME}
+    username: ${INTELLIEDU_APPLICATION_MYSQL_USERNAME}
     password: ${INTELLIEDU_APPLICATION_MYSQL_PASSWORD}
   redis:
     database: ${REDIS_DATABASE_NUMBER}
