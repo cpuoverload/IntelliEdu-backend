@@ -1,0 +1,24 @@
+FROM openjdk:8-jdk
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制项目的所有文件
+COPY . /app
+
+# 确保mvnw具有可执行权限
+RUN chmod +x /app/mvnw
+
+# 构建并安装所有依赖模块
+RUN ./mvnw clean install -pl IntelliEdu-common -am
+RUN ./mvnw clean install -pl IntelliEdu-model -am
+RUN ./mvnw clean install -pl IntelliEdu-api -am
+RUN ./mvnw clean install -pl IntelliEdu-gateway -am
+RUN ./mvnw clean install -pl IntelliEdu-user-service -am
+RUN ./mvnw clean install -pl IntelliEdu-application-service -am
+RUN ./mvnw clean install -pl IntelliEdu-scoring-service -am
+RUN ./mvnw clean install -pl IntelliEdu-answer-record-service -am
+
+# 进入特定的微服务目录并构建项目
+WORKDIR /app/IntelliEdu-user-service
+RUN /app/mvnw clean install

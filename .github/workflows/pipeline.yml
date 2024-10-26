@@ -1,0 +1,160 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-common:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 8 for build
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '8'
+
+    - name: Initialize Maven Wrapper
+      run: |
+        mvn -N io.takari:maven:wrapper
+
+    - name: Set execute permission for mvnw
+      run: chmod +x ./mvnw
+
+    - name: Build IntelliEdu-common
+      run: ./mvnw clean install -f IntelliEdu-common/pom.xml
+
+    - name: Install IntelliEdu-common to local Maven repository
+      run: ./mvnw install -f IntelliEdu-common/pom.xml
+
+    - name: Set up JDK 11 for SonarQube
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: SonarQube Scan for IntelliEdu-common
+      run: |
+        ./mvnw sonar:sonar -X \
+          -Dsonar.projectKey=intelliedu-common \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.java.binaries=$(pwd)/IntelliEdu-common/target/classes \
+          -f IntelliEdu-common/pom.xml
+
+  build-model-api:
+    runs-on: ubuntu-latest
+    needs: build-common
+    strategy:
+      matrix:
+        service: [model, api]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 8 for build
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '8'
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Initialize Maven Wrapper
+      run: |
+        mvn -N io.takari:maven:wrapper
+
+    - name: Set execute permission for mvnw
+      run: chmod +x ./mvnw
+
+    - name: Build and push IntelliEdu-${{ matrix.service }}
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: IntelliEdu-${{ matrix.service }}/Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-${{ matrix.service }}:latest
+
+    - name: Set up JDK 11 for SonarQube
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: SonarQube Scan for IntelliEdu-${{ matrix.service }}
+      run: |
+        ./mvnw sonar:sonar -X \
+          -Dsonar.projectKey=intelliedu-${{ matrix.service }} \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.java.binaries=$(pwd)/IntelliEdu-${{ matrix.service }}/target/classes \
+          -f IntelliEdu-${{ matrix.service }}/pom.xml
+
+  build-other-services:
+    runs-on: ubuntu-latest
+    needs: build-model-api
+    strategy:
+      matrix:
+        service: [gateway, user-service, application-service, scoring-service, answer-record-service]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 8 for build
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '8'
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Initialize Maven Wrapper
+      run: |
+        mvn -N io.takari:maven:wrapper
+
+    - name: Set execute permission for mvnw
+      run: chmod +x ./mvnw
+
+    - name: Build and push IntelliEdu-${{ matrix.service }}
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: IntelliEdu-${{ matrix.service }}/Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-${{ matrix.service }}:latest
+
+    - name: Set up JDK 11 for SonarQube
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: SonarQube Scan for IntelliEdu-${{ matrix.service }}
+      run: |
+        ./mvnw clean compile sonar:sonar -X \
+          -Dsonar.projectKey=intelliedu-${{ matrix.service }} \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.java.binaries=$(pwd)/IntelliEdu-${{ matrix.service }}/target/classes \
+          -f IntelliEdu-${{ matrix.service }}/pom.xml
