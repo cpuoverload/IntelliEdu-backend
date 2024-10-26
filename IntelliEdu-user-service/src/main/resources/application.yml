@@ -11,18 +11,24 @@ spring:
   session:
     store-type: redis
     timeout: 2592000 # 30 days expiration
+    redis:
+      # 禁用 Spring Session 自动配置 Redis 的行为，确保使用云服务商提供的 Redis 配置。
+      # 这行配置可以防止 Spring Boot 在启动时尝试对 Redis 进行任何配置更改，从而避免潜在的连接问题或配置冲突
+      configure-action: none
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/intelli_edu_user
-    username: root
-    password: ${MYSQL_PASSWORD}
+    url: ${INTELLIEDU_USER_MYSQL_HOST}
+    username: ${INTELLIEDU_USER_MYSQL_USERNAME}
+    password: ${INTELLIEDU_USER_MYSQL_PASSWORD}
   redis:
-    database: 1
-    host: localhost
-    port: 6379
+    database: ${REDIS_DATABASE_NUMBER}
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
     timeout: 5000
-#    password: 123456
+    username: ${REDIS_USERNAME}
+    password: ${REDIS_PASSWORD}
+    ssl: true
   cloud:
     nacos:
       discovery:

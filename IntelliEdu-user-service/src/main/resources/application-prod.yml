@@ -1,10 +1,13 @@
 server:
-  port: 8083
+  port: 8081
   servlet:
-    context-path: /api/scoring
+    context-path: /api/user
+    session:
+      cookie:
+        path: /api
 spring:
   application:
-    name: IntelliEdu-scoring-service
+    name: IntelliEdu-user-service
   session:
     store-type: redis
     timeout: 2592000 # 30 days expiration
@@ -12,11 +15,12 @@ spring:
       # 禁用 Spring Session 自动配置 Redis 的行为，确保使用云服务商提供的 Redis 配置。
       # 这行配置可以防止 Spring Boot 在启动时尝试对 Redis 进行任何配置更改，从而避免潜在的连接问题或配置冲突
       configure-action: none
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${INTELLIEDU_SCORING_MYSQL_HOST}
-    username: ${INTELLIEDU_SCORING_MYSQL_USERNAME}
-    password: ${INTELLIEDU_SCORING_MYSQL_PASSWORD}
+    url: ${INTELLIEDU_USER_MYSQL_HOST}
+    username: ${INTELLIEDU_USER_MYSQL_USERNAME}
+    password: ${INTELLIEDU_USER_MYSQL_PASSWORD}
   redis:
     database: ${REDIS_DATABASE_NUMBER}
     host: ${REDIS_HOST}

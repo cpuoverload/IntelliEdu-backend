@@ -1,10 +1,10 @@
 server:
-  port: 8083
+  port: 8082
   servlet:
-    context-path: /api/scoring
+    context-path: /api/application
 spring:
   application:
-    name: IntelliEdu-scoring-service
+    name: IntelliEdu-application-service
   session:
     store-type: redis
     timeout: 2592000 # 30 days expiration
@@ -14,9 +14,9 @@ spring:
       configure-action: none
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${INTELLIEDU_SCORING_MYSQL_HOST}
-    username: ${INTELLIEDU_SCORING_MYSQL_USERNAME}
-    password: ${INTELLIEDU_SCORING_MYSQL_PASSWORD}
+    url: ${INTELLIEDU_APPLICATION_MYSQL_HOST}
+    username: ${INTELLIEDU_APPLICATION_MYSQL_USERNAME}
+    password: ${INTELLIEDU_APPLICATION_MYSQL_PASSWORD}
   redis:
     database: ${REDIS_DATABASE_NUMBER}
     host: ${REDIS_HOST}
@@ -40,9 +40,3 @@ mybatis-plus:
       logic-not-delete-value: 0
 knife4j:
   enable: true
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: 5000  # milliseconds
-        readTimeout: 10000    # milliseconds
