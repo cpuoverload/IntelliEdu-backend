@@ -154,8 +154,6 @@ class AnswerRecordServiceImplTest {
 
         when(scoringClient.doScore(any(DoScoreRequest.class))).thenReturn(scoredAnswerRecord);
 
-        // Long id = answerRecordService.addMyAnswerRecord(answerRecord, request);
-        // verify(answerRecordMapper, times(1)).updateById(scoredAnswerRecord);
     }
 
     @Test
