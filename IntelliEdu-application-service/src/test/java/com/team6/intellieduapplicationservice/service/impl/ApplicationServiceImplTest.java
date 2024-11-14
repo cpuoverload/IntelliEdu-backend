@@ -53,7 +53,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ContextConfiguration(classes = {ApplicationServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-class ApplicationServiceImplDiffblueTest {
+class ApplicationServiceImplTest {
     @MockBean
     private ApplicationMapper applicationMapper;
 

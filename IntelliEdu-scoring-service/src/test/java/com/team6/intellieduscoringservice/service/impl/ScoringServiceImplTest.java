@@ -52,7 +52,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ContextConfiguration(classes = {ScoringServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-class ScoringServiceImplDiffblueTest {
+class ScoringServiceImplTest {
     @MockBean
     private ApplicationClient applicationClient;
 
