@@ -21,7 +21,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 @ContextConfiguration(classes = {AppConfig.class})
 @ExtendWith(SpringExtension.class)
-class AppConfigDiffblueTest {
+class AppConfigTest {
     @MockBean
     private AdminInterceptor adminInterceptor;
 

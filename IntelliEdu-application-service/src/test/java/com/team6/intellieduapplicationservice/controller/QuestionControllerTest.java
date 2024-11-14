@@ -52,7 +52,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @ContextConfiguration(classes = {QuestionController.class})
 @ExtendWith(SpringExtension.class)
-class QuestionControllerDiffblueTest {
+class QuestionControllerTest {
     @MockBean
     private AiManager aiManager;
 

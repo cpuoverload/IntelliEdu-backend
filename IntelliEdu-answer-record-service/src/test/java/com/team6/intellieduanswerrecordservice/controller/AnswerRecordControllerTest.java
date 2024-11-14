@@ -35,7 +35,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ContextConfiguration(classes = {AnswerRecordController.class})
 @ExtendWith(SpringExtension.class)
-class AnswerRecordControllerDiffblueTest {
+class AnswerRecordControllerTest {
     @Autowired
     private AnswerRecordController answerRecordController;
 
