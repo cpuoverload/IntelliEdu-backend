@@ -8,14 +8,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.team6.intellieduuserservice.constant.Constant;
-import com.team6.intellieduuserservice.mapper.UserMapper;
+import com.team6.intellieducommon.utils.BusinessException;
+import com.team6.intellieducommon.utils.Err;
 import com.team6.intelliedumodel.dto.user.ListUserRequest;
 import com.team6.intelliedumodel.entity.User;
 import com.team6.intelliedumodel.vo.UserVo;
+import com.team6.intellieduuserservice.constant.Constant;
+import com.team6.intellieduuserservice.mapper.UserMapper;
 import com.team6.intellieduuserservice.service.UserService;
-import com.team6.intellieducommon.utils.BusinessException;
-import com.team6.intellieducommon.utils.Err;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     /**
      * 在 insert/update 时校验参数
-     * @param user 封装参数
+     *
+     * @param user     封装参数
      * @param isUpdate 是否是更新操作
      */
     public void validate(User user, boolean isUpdate) {
@@ -70,6 +71,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     /**
      * 登录校验
+     *
      * @param username
      * @param password
      */
@@ -87,6 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     /**
      * entity 转换为 vo
+     *
      * @param user
      * @return
      */
@@ -189,7 +192,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         validate(user, false);
         // 2. 判断 username 是否重复
         String username = user.getUsername();
-        synchronized (username.intern()) {
+        Object lock = new Object();
+        // username.intern()虽然可以避免创建新的锁对象，但它会将字符串常量池中的字符串作为锁对象，
+        // 这可能会导致锁的粒度过大，影响系统性能和并发性。
+        // 使用新的Object作为锁对象是为了确保锁的粒度更细，避免不必要的锁竞争，从而提高系统的并发性能
+        synchronized (lock) {
             long count = this.count(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
             // 2.1 若重复，注册失败
             if (count > 0) {

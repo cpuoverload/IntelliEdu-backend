@@ -26,7 +26,7 @@ public class AdminInterceptor implements HandlerInterceptor {
             if (annotation != null) {
                 UserVo user = (UserVo) request.getSession().getAttribute(Constant.LOGIN_USER);
                 if (user == null) {
-                    response.sendRedirect("/login"); // todo 修改重定向页面 path
+                    response.sendRedirect("/login");
                     return false;
                 }
                 UserVo userVo = userService.getMyInfo(request);

@@ -146,7 +146,7 @@ public class QuestionController {
     }
 
     @GetMapping("/get/{appId}")
-    ApiResponse<Question> getQuestionByAppId(@PathVariable Long appId) {
+    public ApiResponse<Question> getQuestionByAppId(@PathVariable Long appId) {
         return ApiResponse.success(questionService.getQuestionByAppId(appId));
     }
 

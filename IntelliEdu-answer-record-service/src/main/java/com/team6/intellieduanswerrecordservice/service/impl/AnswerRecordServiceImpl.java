@@ -103,7 +103,7 @@ public class AnswerRecordServiceImpl extends ServiceImpl<AnswerRecordMapper, Ans
             userAnswerWithResult.setId(answerRecordId);
             answerRecordMapper.updateById(userAnswerWithResult);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("do score failed", e);
             throw new BusinessException(Err.SYSTEM_ERROR, "do score failed");
         }
 
