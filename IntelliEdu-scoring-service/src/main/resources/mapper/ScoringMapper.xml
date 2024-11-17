@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.team6.intellieduscoringservice.mapper.ScoringMapper">
+<mapper namespace="me.intelliedu.intellieduscoringservice.mapper.ScoringMapper">
 
-    <resultMap id="BaseResultMap" type="com.team6.intelliedumodel.entity.Scoring">
+    <resultMap id="BaseResultMap" type="me.intelliedu.intelliedumodel.entity.Scoring">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="appId" column="app_id" jdbcType="BIGINT"/>
         <result property="resultName" column="result_name" jdbcType="VARCHAR"/>
