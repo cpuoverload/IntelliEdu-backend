@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.team6.intellieduapplicationservice.mapper.ApplicationMapper">
+<mapper namespace="me.intelliedu.intellieduapplicationservice.mapper.ApplicationMapper">
 
-    <resultMap id="BaseResultMap" type="com.team6.intelliedumodel.entity.Application">
+    <resultMap id="BaseResultMap" type="me.intelliedu.intelliedumodel.entity.Application">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="appName" column="app_name" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
